@@ -22,9 +22,11 @@ void Game::poolEvents() {
 
 			mouseIndex(r, c, mousePosWindow); // returns the board index on which the mouse happen to be when called by assigning it in r and c.
 
-			if (playerTurn == 'W' && (figs->board[r][c] >= 98 && figs->board[r][c] <= 122 || figs->board[r][c]== '2'))
+			if (playerTurn == 'W' && (figs->board[r][c] >= 98 && figs->board[r][c] <= 122 || figs->board[r][c] == '2'))
 				break;
 			else if (playerTurn == 'B' && (figs->board[r][c] >= 65 && figs->board[r][c] <= 90 || figs->board[r][c] == '1'))
+				break;
+			else if (playerTurn == '.')
 				break;
 
 			if (figs->board[r][c] != '.') {
@@ -65,6 +67,24 @@ void Game::poolEvents() {
 						isKingInDanger();
 
 						(playerTurn == 'W') ? playerTurn = 'B' : playerTurn = 'W'; // if we arrive here that means the player which turn it is has made a valid move and now we change turns.
+
+						if (this->figs->kings.inDangerW == 1) {
+							if (checkMate()) {
+								this->text.setString("Black Wins!");
+								playerTurn = '.';
+								weHaveWinner = 1;
+								break;
+							};
+						}
+						else if (this->figs->kings.inDangerB == 1) {
+							if (checkMate()) {
+								this->text.setString("White Wins!");
+								playerTurn = '.';
+								weHaveWinner = 1;
+								break;
+							};
+						}
+
 						break;
 					}
 					else {
@@ -178,6 +198,11 @@ void Game::render() {
 		window->draw(figs->pawns.pawnB[i]);
 	}
 
+	if (weHaveWinner) {
+		window->draw(textBackground);
+		window->draw(text);
+	}
+
 	// Display drawn
 	window->display();
 
@@ -194,28 +219,33 @@ bool Game::isRunning() {
 };
 
 bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
-	char boardCopy[8][8];
+	char boardCopy[8][8]; // making a variable to the board.
 
+	// copying the board.
 	for (size_t j = 0;j < 8;j++) {
 		for (size_t k = 0;k < 8;k++) {
 			boardCopy[j][k] = figs->board[j][k];
 		}
-	}
+	} 
 
+	// updating the copy based on the made move.
 	boardCopy[r][c] = figs->board[pos.first][pos.second];
 	boardCopy[pos.first][pos.second] = '.';
 
-	vector <pair<int, int>> current; 
+	vector <pair<int, int>> current; // use this vector to iterate through the board and store the available positions of figure we iterate.
 
-	pair<int, int> KingW;
-	pair<int, int> KingB;
+	pair<int, int> KingW; // making variable to store the position of the white king.
+	pair<int, int> KingB; // making variable to store the position of the black king.
 
-	(boardCopy[r][c] == '1') ? KingW = make_pair(r, c) : KingW = figs->kings.posW;
-	(boardCopy[r][c] == '2') ? KingB = make_pair(r, c) : KingB = figs->kings.posB;
+	(boardCopy[r][c] == '1') ? KingW = make_pair(r, c) : KingW = figs->kings.posW; // finding and assigning the white king position.
+	(boardCopy[r][c] == '2') ? KingB = make_pair(r, c) : KingB = figs->kings.posB; // finding and assigning the black king position.
 
+	// we iterate through every position on the board. j is for rows and k is for columns.
 	for (int j = 0;j < 8;j++) {
 		for (int k = 0;k < 8;k++) {
+			// we only do switch case for position with figure on it.
 			if (boardCopy[j][k] != '.') {
+				// get the possible moves of the figure on the current position and saving them in the vector [current].
 				switch (boardCopy[j][k]) {
 				case 'R':
 					this->figs->rooks.GetAvailablePosW(boardCopy, Vector2i(j, k), current);
@@ -255,28 +285,141 @@ bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
 					break;
 				}
 
+				// checking if the vector current has any positions in it. We check bigger than 1 because there will be
+				// always 1 position in it (of the figure we are checking).
 				if (current.size() > 1) {
+
+					// making sure whites is not putting his own king in danger.
 					if (find(current.begin() + 1, current.end(), KingW) != current.end() && playerTurn == 'W') {
 						return false;
-					}
+					} // cheking if the king is still in check if it was.
 					else if(find(current.begin() + 1, current.end(), KingW) != current.end() && playerTurn == 'W' && figs->kings.inDangerW == 1) {
 						return false;
-					}
+					} // making sure blacks is not putting his own king in danger.
 					else if (find(current.begin() + 1, current.end(), KingB) != current.end() && playerTurn == 'B') {
 						return false;
-					}
+					} // checking if the king is still in check if it was.
 					else if (find(current.begin() + 1, current.end(), KingB) != current.end() && playerTurn == 'B' && figs->kings.inDangerB == 1) {
 						return false;
 					}
 				}
 
+				// emptying the vector for the next oteartion
 				current.clear();
 			}
 		}
 	}
 
+	// if we haven't returned false until now then the move is valid and our king is not in danger so we return true.
 	return true;
 };
+
+bool Game::checkMate() {
+
+	vector <pair<int, int>> curr; // use this vector to iterate through the board and store the available positions of figure we iterate.
+
+	if (figs->kings.inDangerW == 1) {
+
+		for (int j = 0;j < 8;j++) {
+			for (int k = 0;k < 8;k++) {
+				// we only do switch case for position with figure on it.
+				if (this->figs->board[j][k] != '.') {
+					// get the possible moves of the figure on the current position and saving them in the vector [current].
+					switch (figs->board[j][k]) {
+					case 'R':
+						this->figs->rooks.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'K':
+						this->figs->knights.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'B':
+						this->figs->bishops.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'P':
+						this->figs->pawns.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'Q':
+						this->figs->queens.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case '1':
+						this->figs->kings.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					}
+
+					// checking if the vector current has any positions in it. We check bigger than 1 because there will be
+					// always 1 position in it (of the figure we are checking).
+					if (curr.size() > 1) {
+
+						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
+
+							if (isNextMoveValid(it->first, it->second, curr.front())) {
+								return false;
+							}
+
+						}
+						
+					}
+
+					// emptying the vector for the next iteartion
+					curr.clear();
+				}
+			}
+		}
+
+		return true;
+	}
+
+	if (figs->kings.inDangerB == 1) {
+
+		for (int j = 0;j < 8;j++) {
+			for (int k = 0;k < 8;k++) {
+				// we only do switch case for position with figure on it.
+				if (this->figs->board[j][k] != '.') {
+					// get the possible moves of the figure on the current position and saving them in the vector [current].
+					switch (figs->board[j][k]) {
+					case 'r':
+						this->figs->rooks.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'k':
+						this->figs->knights.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'b':
+						this->figs->bishops.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'p':
+						this->figs->pawns.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'q':
+						this->figs->queens.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case '2':
+						this->figs->kings.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					}
+
+					// checking if the vector current has any positions in it. We check bigger than 1 because there will be
+					// always 1 position in it (of the figure we are checking).
+					if (curr.size() > 1) {
+
+						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
+
+							if (isNextMoveValid(it->first, it->second, curr.front())) {
+								return false;
+							}
+
+						}
+
+					}
+
+					// emptying the vector for the next iteartion
+					curr.clear();
+				}
+			}
+		}
+
+		return true;
+	}
+}
 
 void Game::isKingInDanger() {
 	pair<int, int> kingWpos = this->figs->kings.posW;
@@ -345,15 +488,23 @@ void Game::isKingInDanger() {
 	vector<pair<int, int>>::iterator Wdanger = find(blacks.begin(),blacks.end(),kingWpos);
 	vector<pair<int, int>>::iterator Bdanger = find(whites.begin(), whites.end(), kingBpos);
 
-	if (Wdanger != blacks.end())
+	if (Wdanger != blacks.end()) {
 		this->figs->kings.inDangerW = 1;
-	else
+		this->figs->kings.king[0].setFillColor(Color(252, 3, 119));
+	}
+	else {
 		this->figs->kings.inDangerW = 0;
+		this->figs->kings.king[0].setFillColor(Color::White);
+	}
 
-	if (Bdanger != whites.end())
+	if (Bdanger != whites.end()) {
 		this->figs->kings.inDangerB = 1;
-	else
+		this->figs->kings.king[1].setFillColor(Color(252, 3, 119));
+	}
+	else {
 		this->figs->kings.inDangerB = 0;
+		this->figs->kings.king[1].setFillColor(Color::White);
+	};
 };
 
 void Game::deleteFigure(int& r,int& c) {
@@ -364,34 +515,43 @@ void Game::deleteFigure(int& r,int& c) {
 		switch (symbol) {
 		case('R'):
 			this->figs->rooks.getRookW(make_pair(r,c)).setPosition(Vector2f(-100,-100));
+			replace(this->figs->rooks.posW.begin(), this->figs->rooks.posW.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('r'):
-
 			this->figs->rooks.getRookB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->rooks.posB.begin(), this->figs->rooks.posB.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('K'):
 			this->figs->knights.getKnightW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->knights.posW.begin(), this->figs->knights.posW.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('k'):;
 			this->figs->knights.getKnightB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->knights.posB.begin(), this->figs->knights.posB.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('B'):
 			this->figs->bishops.getBishopW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->bishops.posW.begin(), this->figs->bishops.posW.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('b'):
 			this->figs->bishops.getBishopB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->bishops.posB.begin(), this->figs->bishops.posB.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('P'):
 			this->figs->pawns.getPawnW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('p'):
 			this->figs->pawns.getPawnB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('Q'):
 			this->figs->queens.getQueenW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->queens.posW.begin(), this->figs->queens.posW.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		case('q'):
 			this->figs->queens.getQueenB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->queens.posB.begin(), this->figs->queens.posB.end(), make_pair(r, c), make_pair(-1, -1));
 			break;
 		}
 	}
@@ -607,40 +767,40 @@ void Game::glueFigToMouse(char& symbol) {
 
 	switch (this->pressedFigSymbol) {
 	case('R'):
-		this->figs->rooks.getRookW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->rooks.getRookW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('r'):
-		this->figs->rooks.getRookB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->rooks.getRookB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('K'):
-		this->figs->knights.getKnightW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->knights.getKnightW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('k'):
-		this->figs->knights.getKnightB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->knights.getKnightB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('B'):
-		this->figs->bishops.getBishopW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->bishops.getBishopW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('b'):
-		this->figs->bishops.getBishopB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->bishops.getBishopB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('P'):
-		this->figs->pawns.getPawnW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->pawns.getPawnW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('p'):
-		this->figs->pawns.getPawnB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->pawns.getPawnB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('Q'):
-		this->figs->queens.getQueenW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->queens.getQueenW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('q'):
-		this->figs->queens.getQueenB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->queens.getQueenB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('1'):
-		this->figs->kings.getKingW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->kings.getKingW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('2'):
-		this->figs->kings.getKingB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x, mousePosWindow.y));
+		this->figs->kings.getKingB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	}
 };
@@ -666,7 +826,7 @@ Game::Game() {
   
 	this->createVar();
 	this->setWindow();
-
+	this->setText();
 };
 
 void Game::createVar() {
@@ -679,12 +839,23 @@ void Game::setWindow() {
 	ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
-	this->window = new RenderWindow(VideoMode(1100, 900), "Classic Chess", Style::Titlebar | Style::Close,settings);
+	this->window = new RenderWindow(VideoMode(800, 800), "Classic Chess", Style::Titlebar | Style::Close,settings);
 
 	window->setFramerateLimit(144);
 };
 
+void Game::setText() {
+	this->font.loadFromFile("Fonts/arial.ttf");
+	this->text.setFont(font);
+	this->text.setFillColor(Color(52, 235, 103));
+	this->text.setCharacterSize(60);
+	this->text.setStyle(Text::Bold | Text::Underlined);
+	this->text.setPosition(Vector2f(240, 350));
+}
+
 // Destructor
 Game::~Game() {
 	delete window;
+	delete chessBoard;
+	delete figs;
 };

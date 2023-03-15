@@ -29,7 +29,7 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90) {
+		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90 || board[r][pos.y] == '1') {
 			break;
 		}
 		else if (board[r][pos.y] == '2') {
@@ -46,7 +46,7 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90) {
+		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90 || board[r][pos.y] == '1') {
 			break;
 		}
 		else if (board[r][pos.y] == '2') {
@@ -64,7 +64,7 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90 || board[pos.x][c] == '1') {
 			break;
 		}
 		else if (board[pos.x][c] == '2') {
@@ -81,7 +81,7 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90 || board[pos.x][c] == '1') {
 			break;
 		}
 		else if (board[pos.x][c] == '2') {
@@ -90,7 +90,8 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 		}
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x + i][pos.y + i] == '.' && pos.x + i < 8 && pos.y + i < 8) {
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
@@ -99,17 +100,21 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
 			break;
 		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 65 && board[pos.x + i][pos.y + i] <= 90) {
+		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 65 && board[pos.x + i][pos.y + i] <= 90 || board[pos.x + i][pos.y + i] == '1') {
 			break;
 		}
 		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] == '2') {
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
 			break;
 		}
+		else if (pos.x + i >= 8 || pos.y + i >= 8) {
+			break;
+		}
+	
 
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x + i][pos.y - i] == '.' && pos.x + i < 8 && pos.y - i >= 0) {
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
@@ -118,16 +123,19 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
 			break;
 		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 65 && board[pos.x + i][pos.y - i] <= 90) {
+		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 65 && board[pos.x + i][pos.y - i] <= 90 || board[pos.x + i][pos.y - i] == '1') {
 			break;
 		}
 		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] == '2') {
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
 			break;
 		}
+		else if (pos.x + i >= 8 || pos.y - i < 0) {
+			break;
+		}
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x - i][pos.y - i] == '.' && pos.x - i >= 0 && pos.y - i >= 0) {
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
@@ -136,17 +144,20 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
 			break;
 		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 65 && board[pos.x - i][pos.y - i] <= 90) {
+		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 65 && board[pos.x - i][pos.y - i] <= 90 || board[pos.x - i][pos.y - i] == '1') {
 			break;
 		}
 		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] == '2') {
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
 			break;
 		}
+		else if (pos.x - i < 0 || pos.y - i < 0) {
+			break;
+		}
 
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x - i][pos.y + i] == '.' && pos.x - i >= 0 && pos.y + i < 8) {
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
@@ -155,11 +166,14 @@ void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
 			break;
 		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 65 && board[pos.x - i][pos.y + i] <= 90) {
+		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 65 && board[pos.x - i][pos.y + i] <= 90 || board[pos.x - i][pos.y + i] == '1') {
 			break;
 		}
 		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] == '2') {
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
+			break;
+		}
+		else if (pos.x - i < 0 || pos.y + i >= 8) {
 			break;
 		}
 
@@ -178,7 +192,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
+		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122 || board[r][pos.y] == '2') {
 			break;
 		}
 		else if (board[r][pos.y] == '1') {
@@ -195,7 +209,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
+		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122 || board[r][pos.y] == '2') {
 			break;
 		}
 		else if (board[r][pos.y] == '1') {
@@ -212,7 +226,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122) {
+		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122 || board[pos.x][c] == '2') {
 			break;
 		}
 		else if (board[pos.x][c] == '1') {
@@ -229,7 +243,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122) {
+		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122 || board[pos.x][c] == '2') {
 			break;
 		}
 		else if (board[pos.x][c] == '1') {
@@ -238,7 +252,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 		}
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x + i][pos.y + i] == '.' && pos.x + i < 8 && pos.y + i < 8) {
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
@@ -247,17 +261,20 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
 			break;
 		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 97 && board[pos.x + i][pos.y + i] <= 122) {
+		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 97 && board[pos.x + i][pos.y + i] <= 122 || board[pos.x + i][pos.y + i] == '2') {
 			break;
 		}
 		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] == '1') {
 			AP.push_back(make_pair(pos.x + i, pos.y + i));
 			break;
 		}
+		else if (pos.x + i >= 8 || pos.y + i >= 8) {
+			break;
+		}
 
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x + i][pos.y - i] == '.' && pos.x + i < 8 && pos.y - i >= 0) {
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
@@ -266,17 +283,20 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
 			break;
 		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 97 && board[pos.x + i][pos.y - i] <= 122) {
+		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 97 && board[pos.x + i][pos.y - i] <= 122 || board[pos.x + i][pos.y - i] == '2') {
 			break;
 		}
 		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] == '1') {
 			AP.push_back(make_pair(pos.x + i, pos.y - i));
 			break;
 		}
+		else if (pos.x + i >= 8 || pos.y - i < 0) {
+			break;
+		}
 
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x - i][pos.y - i] == '.' && pos.x - i >= 0 && pos.y - i >= 0) {
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
@@ -285,17 +305,20 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
 			break;
 		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 97 && board[pos.x - i][pos.y - i] <= 122) {
+		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 97 && board[pos.x - i][pos.y - i] <= 122 || board[pos.x - i][pos.y - i] == '2') {
 			break;
 		}
 		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] == '1') {
 			AP.push_back(make_pair(pos.x - i, pos.y - i));
 			break;
 		}
+		else if (pos.x - i < 0 || pos.y - i < 0) {
+			break;
+		}
 
 	}
 
-	for (size_t i = 1;i < 8;i++) {
+	for (int i = 1;i < 8;i++) {
 
 		if (board[pos.x - i][pos.y + i] == '.' && pos.x - i >= 0 && pos.y + i < 8) {
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
@@ -304,11 +327,14 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
 			break;
 		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 90 && board[pos.x - i][pos.y + i] <= 122) {
+		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 90 && board[pos.x - i][pos.y + i] <= 122 || board[pos.x - i][pos.y + i] == '2') {
 			break;
 		}
 		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] == '1') {
 			AP.push_back(make_pair(pos.x - i, pos.y + i));
+			break;
+		}
+		else if (pos.x - i < 0 || pos.y + i >= 8) {
 			break;
 		}
 

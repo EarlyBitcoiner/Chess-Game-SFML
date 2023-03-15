@@ -46,24 +46,7 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	AP.push_back(make_pair(pos.x, pos.y));
 
-	for (int r = pos.x-1;r >= 0;r--) {
-
-		if (board[r][pos.y] == '.')
-			AP.push_back(make_pair(r, pos.y));
-		else if(board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
-			AP.push_back(make_pair(r, pos.y));
-			break;
-		}
-		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90) {
-			break;
-		}
-		else if (board[r][pos.y] == '2') {
-			AP.push_back(make_pair(r, pos.y));
-			break;
-		}
-	}
-
-	for (int r = pos.x+1;r <= 8;r++) {
+	for (int r = pos.x - 1;r >= 0;r--) {
 
 		if (board[r][pos.y] == '.')
 			AP.push_back(make_pair(r, pos.y));
@@ -71,7 +54,24 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90) {
+		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90 || board[r][pos.y] == '1') {
+			break;
+		}
+		else if (board[r][pos.y] == '2') {
+			AP.push_back(make_pair(r, pos.y));
+			break;
+		}
+	}
+
+	for (int r = pos.x + 1;r <= 8;r++) {
+
+		if (board[r][pos.y] == '.')
+			AP.push_back(make_pair(r, pos.y));
+		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
+			AP.push_back(make_pair(r, pos.y));
+			break;
+		}
+		else if (board[r][pos.y] >= 65 && board[r][pos.y] <= 90 || board[r][pos.y] == '1') {
 			break;
 		}
 		else if (board[r][pos.y] == '2') {
@@ -81,7 +81,7 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	}
 
-	for (int c = pos.y-1;c >= 0;c--) {
+	for (int c = pos.y - 1;c >= 0;c--) {
 
 		if (board[pos.x][c] == '.')
 			AP.push_back(make_pair(pos.x, c));
@@ -89,7 +89,7 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90 || board[pos.x][c] == '1') {
 			break;
 		}
 		else if (board[pos.x][c] == '2') {
@@ -98,7 +98,7 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 		}
 	}
 
-	for (int c = pos.y+1;c <= 8;c++) {
+	for (int c = pos.y + 1;c <= 8;c++) {
 
 		if (board[pos.x][c] == '.')
 			AP.push_back(make_pair(pos.x, c));
@@ -106,7 +106,7 @@ void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90 || board[pos.x][c] == '1') {
 			break;
 		}
 		else if (board[pos.x][c] == '2') {
@@ -128,7 +128,7 @@ void Rook::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
+		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122 || board[r][pos.y] == '2') {
 			break;
 		}
 		else if (board[r][pos.y] == '1') {
@@ -145,7 +145,7 @@ void Rook::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 			AP.push_back(make_pair(r, pos.y));
 			break;
 		}
-		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122) {
+		else if (board[r][pos.y] >= 97 && board[r][pos.y] <= 122 || board[r][pos.y] == '2') {
 			break;
 		}
 		else if (board[r][pos.y] == '1') {
@@ -158,11 +158,11 @@ void Rook::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 		if (board[pos.x][c] == '.')
 			AP.push_back(make_pair(pos.x, c));
-		else if(board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122) {
+		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122 || board[pos.x][c] == '2') {
 			break;
 		}
 		else if (board[pos.x][c] == '1') {
@@ -175,11 +175,11 @@ void Rook::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 		if (board[pos.x][c] == '.')
 			AP.push_back(make_pair(pos.x, c));
-		else if(board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
+		else if (board[pos.x][c] >= 65 && board[pos.x][c] <= 90) {
 			AP.push_back(make_pair(pos.x, c));
 			break;
 		}
-		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122) {
+		else if (board[pos.x][c] >= 90 && board[pos.x][c] <= 122 || board[pos.x][c] == '2') {
 			break;
 		}
 		else if (board[pos.x][c] == '1') {

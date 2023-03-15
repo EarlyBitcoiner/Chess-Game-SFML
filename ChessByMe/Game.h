@@ -27,16 +27,20 @@ private:
 	Vector2i mousePosWindow;
 	Board* chessBoard;
 	Figures* figs;
+	Font font;
+	Text text;
 	bool pressedFig = 0;
 	char pressedFigSymbol;
 	char playerTurn = 'W'; // the first player to take turn is the Whites (W).
 	vector <pair<int, int>> validPositions; // here we put the valid positions of the piece we have pressed on.
+	bool weHaveWinner = 0;
 
 
 	 
 	// Private func
 	void createVar();
 	void setWindow();
+	void setText();
 
 public:
 
@@ -61,6 +65,8 @@ public:
 	void deleteFigure(int&, int&); // removes a figure drawable capabilities if taken by another figure.(just sets the position to -100,-100)
 
 	bool isNextMoveValid(int r,int c,pair<int,int>); // Does a simulation of the next move and decides it's validity based on whether the king will be put in danger. If you put your own king in danger then it is invalid. If your king is check and you make a move not putting it out of check it is invalid.
+
+	bool checkMate();
 
 	void placeBack(char&,pair<int,int>&); // places the figure's texture back on it's position after draging it with the mouse.
 

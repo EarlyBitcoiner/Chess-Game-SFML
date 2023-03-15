@@ -30,7 +30,7 @@ void Pawn::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	for (int i = 0;i < 8;i++) {
 
-		if (posW[i] == make_pair(1, i))
+		if (posW[i] == make_pair(pos.x, pos.y))
 			AP.push_back(make_pair(3,i));
 
 		if (posW[i] == make_pair(pos.x, pos.y)) {
@@ -53,7 +53,7 @@ void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	for (int i = 0;i < 8;i++) {
 
-		if (posB[i] == make_pair(6, i))
+		if (posB[i] == make_pair(pos.x, pos.y))
 			AP.push_back(make_pair(4, i));
 
 		if (posB[i] == make_pair(pos.x, pos.y)) {
