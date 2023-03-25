@@ -199,7 +199,6 @@ void Game::render() {
 	}
 
 	if (weHaveWinner) {
-		window->draw(textBackground);
 		window->draw(text);
 	}
 
@@ -304,7 +303,7 @@ bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
 					}
 				}
 
-				// emptying the vector for the next oteartion
+				// emptying the vector for the next iteartion
 				current.clear();
 			}
 		}
@@ -451,8 +450,10 @@ void Game::isKingInDanger() {
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
-	temporary = getValidPositions('Q', Vector2i(figs->queens.posW[0].first, figs->queens.posW[0].second));
-	whites.insert(whites.end(), temporary.begin(), temporary.end());
+	for (size_t i = 0;i < this->figs->queens.Wqueens;i++) {
+		temporary = getValidPositions('Q', Vector2i(figs->queens.posW[i].first, figs->queens.posW[i].second));
+		whites.insert(whites.end(), temporary.begin(), temporary.end());
+	}
 
 	temporary = getValidPositions('1', Vector2i(figs->kings.posW.first, figs->kings.posW.second));
 	whites.insert(whites.end(), temporary.begin(), temporary.end());
@@ -478,8 +479,10 @@ void Game::isKingInDanger() {
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
-	temporary = getValidPositions('q', Vector2i(figs->queens.posB[0].first, figs->queens.posB[0].second));
-	blacks.insert(blacks.end(), temporary.begin(), temporary.end());
+	for (size_t i = 0;i < this->figs->queens.Bqueens;i++) {
+		temporary = getValidPositions('q', Vector2i(figs->queens.posB[i].first, figs->queens.posB[i].second));
+		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
+	}
 
 	temporary = getValidPositions('2', Vector2i(figs->kings.posB.first, figs->kings.posB.second));
 	blacks.insert(blacks.end(), temporary.begin(), temporary.end());
@@ -515,43 +518,43 @@ void Game::deleteFigure(int& r,int& c) {
 		switch (symbol) {
 		case('R'):
 			this->figs->rooks.getRookW(make_pair(r,c)).setPosition(Vector2f(-100,-100));
-			replace(this->figs->rooks.posW.begin(), this->figs->rooks.posW.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->rooks.posW.begin(), this->figs->rooks.posW.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('r'):
 			this->figs->rooks.getRookB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->rooks.posB.begin(), this->figs->rooks.posB.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->rooks.posB.begin(), this->figs->rooks.posB.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('K'):
 			this->figs->knights.getKnightW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->knights.posW.begin(), this->figs->knights.posW.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->knights.posW.begin(), this->figs->knights.posW.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('k'):;
 			this->figs->knights.getKnightB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->knights.posB.begin(), this->figs->knights.posB.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->knights.posB.begin(), this->figs->knights.posB.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('B'):
 			this->figs->bishops.getBishopW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->bishops.posW.begin(), this->figs->bishops.posW.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->bishops.posW.begin(), this->figs->bishops.posW.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('b'):
 			this->figs->bishops.getBishopB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->bishops.posB.begin(), this->figs->bishops.posB.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->bishops.posB.begin(), this->figs->bishops.posB.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('P'):
 			this->figs->pawns.getPawnW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('p'):
 			this->figs->pawns.getPawnB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('Q'):
 			this->figs->queens.getQueenW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->queens.posW.begin(), this->figs->queens.posW.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->queens.posW.begin(), this->figs->queens.posW.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('q'):
 			this->figs->queens.getQueenB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->queens.posB.begin(), this->figs->queens.posB.end(), make_pair(r, c), make_pair(-1, -1));
+			replace(this->figs->queens.posB.begin(), this->figs->queens.posB.end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		}
 	}
@@ -657,9 +660,10 @@ void Game::updateBoardPosition(int& r, int& c) {
 		replace(figs->pawns.posW.begin(), figs->pawns.posW.end(), oldPos, make_pair(r, c));
 
 		if (r == 7) {
-			this->figs->board[r][c] = 'Q';
-
 			this->figs->pawns.getPawnW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-10, -10));
+
+			this->figs->board[r][c] = 'Q';
 
 			this->figs->queens.Wqueens++;
 			this->figs->queens.posW[figs->queens.Wqueens - 1] = make_pair(r, c);
@@ -677,9 +681,10 @@ void Game::updateBoardPosition(int& r, int& c) {
 		replace(figs->pawns.posB.begin(), figs->pawns.posB.end(), oldPos, make_pair(r, c));
 
 		if (r == 0) {
-			this->figs->board[r][c] = 'q';
-
 			this->figs->pawns.getPawnB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-10, -10));
+
+			this->figs->board[r][c] = 'q';
 
 			this->figs->queens.Bqueens++;
 			this->figs->queens.posB[figs->queens.Bqueens - 1] = make_pair(r, c);
