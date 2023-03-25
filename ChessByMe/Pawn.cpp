@@ -25,6 +25,26 @@ Pawn::Pawn() {
 
 }
 
+array<pair<int, int>, 8>& Pawn::getPosW()
+{
+	return this->posW;
+}
+
+array<pair<int, int>, 8>& Pawn::getPosB()
+{
+	return this->posB;
+}
+
+Texture& Pawn::getWhiteTexture()
+{
+	return this->texture[0];
+}
+
+Texture& Pawn::getBlackTexture()
+{
+	return this->texture[1];
+}
+
 void Pawn::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 	AP.push_back(make_pair(pos.x, pos.y));
 
@@ -59,20 +79,30 @@ void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
 };
 
-RectangleShape& Pawn::getPawnW(pair<int, int> pos) {
+RectangleShape& Pawn::getPawnWatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posW[i] == pos)
 			return pawnW[i];
 	}
 
-};
+}
 
-RectangleShape& Pawn::getPawnB(pair<int, int> pos) {
+RectangleShape& Pawn::getPawnWatIndex(int index)
+{
+	return this->pawnW[index];
+}
+
+RectangleShape& Pawn::getPawnBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posB[i] == pos)
 			return pawnB[i];
 	}
 
-};
+}
+
+RectangleShape& Pawn::getPawnBatIndex(int index)
+{
+	return this->pawnB[index];
+}

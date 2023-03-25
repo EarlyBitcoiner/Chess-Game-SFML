@@ -25,6 +25,26 @@ Bishop::Bishop() {
 
 }
 
+array<pair<int, int>, 8>& Bishop::getPosW()
+{
+	return this->posW;
+}
+
+array<pair<int, int>, 8>& Bishop::getPosB()
+{
+	return this->posB;
+}
+
+Texture& Bishop::getWhiteTexture()
+{
+	return this->texture[0];
+}
+
+Texture& Bishop::getBlackTexture()
+{
+	return this->texture[1];
+}
+
 void Bishop::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
 	AP.push_back(make_pair(pos.x, pos.y));
@@ -210,20 +230,30 @@ void Bishop::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, i
 	}
 }
 
-RectangleShape& Bishop::getBishopW(pair<int, int> pos) {
+RectangleShape& Bishop::getBishopWatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posW[i] == pos)
 			return bishopW[i];
 	}
 
-};
+}
+RectangleShape& Bishop::getBishopWatIndex(int index)
+{
+	return this->bishopW[index];
+}
+;
 
-RectangleShape& Bishop::getBishopB(pair<int, int> pos) {
+RectangleShape& Bishop::getBishopBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posB[i] == pos)
 			return bishopB[i];
 	}
 
-};
+}
+RectangleShape& Bishop::getBishopBatIndex(int index)
+{
+	return this->bishopB[index];
+}
+;

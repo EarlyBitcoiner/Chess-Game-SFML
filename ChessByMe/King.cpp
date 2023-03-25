@@ -15,6 +15,62 @@ King::King() {
 	
 }
 
+bool King::gethasWmoved() {
+	return this->hasWmoved;
+};
+
+bool King::gethasBmoved() {
+	return this->hasBmoved;
+};
+
+void King::sethasWmoved(bool value) {
+	this->hasWmoved = value;
+};
+
+void King::sethasBmoved(bool value) {
+	this->hasBmoved = value;
+};
+
+bool King::getWinDanger()
+{
+	return this->WinDanger;
+}
+
+bool King::getBinDanger()
+{
+	return this->BinDanger;
+}
+
+void King::setWinDanger(bool value)
+{
+	this->WinDanger = value;
+}
+
+void King::setBinDanger(bool value)
+{
+	this->BinDanger = value;
+}
+
+pair<int, int>& King::getPosW()
+{
+	return this->posW;
+}
+
+pair<int, int>& King::getPosB()
+{
+	return this->posB;
+}
+
+Texture& King::getWhiteTexture()
+{
+	return this->texture[0];
+}
+
+Texture& King::getBlackTexture()
+{
+	return this->texture[1];
+}
+
 void King::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 	AP.push_back(make_pair(pos.x, pos.y));
 
@@ -50,7 +106,7 @@ void King::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 		pos.x + 1 < 8 && pos.y + 1 < 8)
 		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
 
-	if ( hasMovedW == 0 && board[pos.x][pos.y + 1] == '.' && 
+	if ( hasWmoved == 0 && board[pos.x][pos.y + 1] == '.' && 
 		 board[pos.x][pos.y + 2] == '.' && 
 		 board[pos.x][pos.y + 3] == '.' &&
 		 board[pos.x][pos.y + 4] == 'R') {
@@ -59,7 +115,7 @@ void King::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	}
 
-	if (hasMovedW == 0 && board[pos.x][pos.y - 1] == '.' &&
+	if (hasWmoved == 0 && board[pos.x][pos.y - 1] == '.' &&
 		board[pos.x][pos.y - 2] == '.' &&
 		board[pos.x][pos.y - 3] == 'R') {
 
@@ -103,7 +159,7 @@ void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 		pos.x + 1 < 8 && pos.y + 1 < 8)
 		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
 
-	if (hasMovedB == 0 && board[pos.x][pos.y + 1] == '.' &&
+	if (hasBmoved == 0 && board[pos.x][pos.y + 1] == '.' &&
 		board[pos.x][pos.y + 2] == '.' &&
 		board[pos.x][pos.y + 3] == '.' &&
 		board[pos.x][pos.y + 4] == 'r') {
@@ -112,7 +168,7 @@ void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	}
 
-	if (hasMovedB == 0 && board[pos.x][pos.y - 1] == '.' &&
+	if (hasBmoved == 0 && board[pos.x][pos.y - 1] == '.' &&
 		board[pos.x][pos.y - 2] == '.' &&
 		board[pos.x][pos.y - 3] == 'r') {
 
@@ -121,16 +177,22 @@ void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 	}
 };
 
-RectangleShape& King::getKingW(pair<int, int> pos) {
+RectangleShape& King::getKingWatPos(pair<int, int> pos) {
 
 		if (posW == pos)
 			return king[0];
 
-};
+}
 
-RectangleShape& King::getKingB(pair<int, int> pos) {
+RectangleShape& King::getKingBatPos(pair<int, int> pos) {
 
 	if (posB == pos)
 		return king[1];
 
-};
+}
+
+RectangleShape& King::getKingAtIndex(int index)
+{
+	return this->king[index];
+}
+;

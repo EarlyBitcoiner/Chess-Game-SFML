@@ -12,22 +12,37 @@ using namespace std;
 using namespace sf;
 
 class Rook {
-public:
-	array<pair<int,int>,8> posW;
+private:
+
+	array<pair<int, int>, 8> posW;
 	array<pair<int, int>, 8> posB;
 	Texture texture[2];
 	RectangleShape rookW[2];
 	RectangleShape rookB[2];
 
+public:
+
 	Rook();
+
+	array<pair<int, int>, 8>& getPosW();
+
+	array<pair<int, int>, 8>& getPosB();
+
+	Texture& getWhiteTexture();
+
+	Texture& getBlackTexture();
 
 	void GetAvailablePosW(char board[8][8],Vector2i pos,vector<pair<int,int>>& AP);
 
 	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
 
-	RectangleShape& getRookW(pair<int, int>);
+	RectangleShape& getRookWatPos(pair<int, int>);
 
-	RectangleShape& getRookB(pair<int, int>);
+	RectangleShape& getRookWatIndex(int index);
+
+	RectangleShape& getRookBatPos(pair<int, int>);
+
+	RectangleShape& getRookBatIndex(int index);
 };
 
 #endif // !ROOK_H

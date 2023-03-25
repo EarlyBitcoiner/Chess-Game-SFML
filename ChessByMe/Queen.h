@@ -12,17 +12,38 @@ using namespace std;
 using namespace sf;
 
 class Queen {
-public:
+private:
 	array<pair<int, int>, 8> posW;
 	array<pair<int, int>, 8> posB;
 	Texture texture[2];
-	RectangleShape queenW[5];
-	RectangleShape queenB[5];
+	RectangleShape queenW[8];
+	RectangleShape queenB[8];
 
 	int Wqueens = 1;
 	int Bqueens = 1;
 
+public:
 	Queen();
+
+	pair<int, int>& posWat(int index);
+
+	pair<int, int>& posBat(int index);
+
+	Texture& getWhiteTexture();
+
+	Texture& getBlackTexture();
+
+	array<pair<int, int>, 8>& getPosW();
+
+	array<pair<int, int>, 8>& getPosB();
+
+	void addWqueen();
+
+	void addBqueen();
+
+	int getWqueens();
+
+	int getBqueens();
 
 	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
 
@@ -30,7 +51,12 @@ public:
 
 	RectangleShape& getQueenW(pair<int, int>);
 
+	RectangleShape& getQueenWatIndex(int index);
+
 	RectangleShape& getQueenB(pair<int, int>);
+
+	RectangleShape& getQueenBatIndex(int index);
+
 };
 
 #endif

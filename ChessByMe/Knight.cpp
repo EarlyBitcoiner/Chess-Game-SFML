@@ -162,20 +162,50 @@ void Knight::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, i
 	}
 };
 
-RectangleShape& Knight::getKnightW(pair<int, int> pos) {
+array<pair<int, int>, 8>& Knight::getPosW()
+{
+	return this->posW;
+}
+
+array<pair<int, int>, 8>& Knight::getPosB()
+{
+	return this->posB;
+}
+
+Texture& Knight::getWhiteTexture()
+{
+	return this->texture[0];
+}
+
+Texture& Knight::getBlackTexture()
+{
+	return this->texture[1];
+}
+
+RectangleShape& Knight::getKnightWatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posW[i] == pos)
 			return knightW[i];
 	}
 
-};
+}
+RectangleShape& Knight::getKnightWatIndex(int index)
+{
+	return this->knightW[index];
+}
+;
 
-RectangleShape& Knight::getKnightB(pair<int, int> pos) {
+RectangleShape& Knight::getKnightBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posB[i] == pos)
 			return knightB[i];
 	}
 
-};
+}
+RectangleShape& Knight::getKnightBatIndex(int index)
+{
+	return this->knightB[index];
+}
+;

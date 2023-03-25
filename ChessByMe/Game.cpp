@@ -3,8 +3,7 @@
 #include "Board.h"
 #include "Figures.h"
 
-#include <set>
-
+// Events Logic
 void Game::poolEvents() {
 
 	while (this->window->pollEvent(mainEv)) { // we stay here until all events are gone through.
@@ -68,7 +67,7 @@ void Game::poolEvents() {
 
 						(playerTurn == 'W') ? playerTurn = 'B' : playerTurn = 'W'; // if we arrive here that means the player which turn it is has made a valid move and now we change turns.
 
-						if (this->figs->kings.inDangerW == 1) {
+						if (this->figs->kings.getWinDanger()) {
 							if (checkMate()) {
 								this->text.setString("Black Wins!");
 								playerTurn = '.';
@@ -76,7 +75,7 @@ void Game::poolEvents() {
 								break;
 							};
 						}
-						else if (this->figs->kings.inDangerB == 1) {
+						else if (this->figs->kings.getBinDanger()) {
 							if (checkMate()) {
 								this->text.setString("White Wins!");
 								playerTurn = '.';
@@ -107,6 +106,7 @@ void Game::poolEvents() {
 
 }
 
+// Game Logic
 vector<pair<int,int>> Game::getValidPositions(char fig,Vector2i pos) {
 
 	vector<pair<int, int>> v;
@@ -172,30 +172,30 @@ void Game::render() {
 	}
 
 	// Draw Figures
-	for (size_t i = 0;i < figs->queens.Wqueens;i++) {
-		window->draw(figs->queens.queenW[i]);
-	}
-
-	for (size_t i = 0;i < figs->queens.Bqueens;i++) {
-		window->draw(figs->queens.queenB[i]);
-	}
-
-	for (size_t i = 0;i < 2;i++) {
-		window->draw(figs->kings.king[i]);
-
-		window->draw(figs->rooks.rookW[i]);
-		window->draw(figs->rooks.rookB[i]);
-
-		window->draw(figs->bishops.bishopW[i]);
-		window->draw(figs->bishops.bishopB[i]);
-
-		window->draw(figs->knights.knightW[i]);
-		window->draw(figs->knights.knightB[i]);
+	for (size_t i = 0;i < 8;i++) {
+		window->draw(figs->queens.getQueenWatIndex(i));
 	}
 
 	for (size_t i = 0;i < 8;i++) {
-		window->draw(figs->pawns.pawnW[i]);
-		window->draw(figs->pawns.pawnB[i]);
+		window->draw(figs->queens.getQueenBatIndex(i));
+	}
+
+	for (size_t i = 0;i < 2;i++) {
+		window->draw(figs->kings.getKingAtIndex(i));
+
+		window->draw(figs->rooks.getRookWatIndex(i));
+		window->draw(figs->rooks.getRookBatIndex(i));
+
+		window->draw(figs->bishops.getBishopWatIndex(i));
+		window->draw(figs->bishops.getBishopBatIndex(i));
+
+		window->draw(figs->knights.getKnightWatIndex(i));
+		window->draw(figs->knights.getKnightBatIndex(i));
+	}
+
+	for (size_t i = 0;i < 8;i++) {
+		window->draw(figs->pawns.getPawnWatIndex(i));
+		window->draw(figs->pawns.getPawnBatIndex(i));
 	}
 
 	if (weHaveWinner) {
@@ -236,8 +236,8 @@ bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
 	pair<int, int> KingW; // making variable to store the position of the white king.
 	pair<int, int> KingB; // making variable to store the position of the black king.
 
-	(boardCopy[r][c] == '1') ? KingW = make_pair(r, c) : KingW = figs->kings.posW; // finding and assigning the white king position.
-	(boardCopy[r][c] == '2') ? KingB = make_pair(r, c) : KingB = figs->kings.posB; // finding and assigning the black king position.
+	(boardCopy[r][c] == '1') ? KingW = make_pair(r, c) : KingW = figs->kings.getPosW(); // finding and assigning the white king position.
+	(boardCopy[r][c] == '2') ? KingB = make_pair(r, c) : KingB = figs->kings.getPosB(); // finding and assigning the black king position.
 
 	// we iterate through every position on the board. j is for rows and k is for columns.
 	for (int j = 0;j < 8;j++) {
@@ -292,13 +292,13 @@ bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
 					if (find(current.begin() + 1, current.end(), KingW) != current.end() && playerTurn == 'W') {
 						return false;
 					} // cheking if the king is still in check if it was.
-					else if(find(current.begin() + 1, current.end(), KingW) != current.end() && playerTurn == 'W' && figs->kings.inDangerW == 1) {
+					else if(find(current.begin() + 1, current.end(), KingW) != current.end() && playerTurn == 'W' && figs->kings.getWinDanger()) {
 						return false;
 					} // making sure blacks is not putting his own king in danger.
 					else if (find(current.begin() + 1, current.end(), KingB) != current.end() && playerTurn == 'B') {
 						return false;
 					} // checking if the king is still in check if it was.
-					else if (find(current.begin() + 1, current.end(), KingB) != current.end() && playerTurn == 'B' && figs->kings.inDangerB == 1) {
+					else if (find(current.begin() + 1, current.end(), KingB) != current.end() && playerTurn == 'B' && figs->kings.getBinDanger()) {
 						return false;
 					}
 				}
@@ -317,7 +317,7 @@ bool Game::checkMate() {
 
 	vector <pair<int, int>> curr; // use this vector to iterate through the board and store the available positions of figure we iterate.
 
-	if (figs->kings.inDangerW == 1) {
+	if (figs->kings.getWinDanger()) {
 
 		for (int j = 0;j < 8;j++) {
 			for (int k = 0;k < 8;k++) {
@@ -368,7 +368,7 @@ bool Game::checkMate() {
 		return true;
 	}
 
-	if (figs->kings.inDangerB == 1) {
+	if (figs->kings.getBinDanger()) {
 
 		for (int j = 0;j < 8;j++) {
 			for (int k = 0;k < 8;k++) {
@@ -421,8 +421,8 @@ bool Game::checkMate() {
 }
 
 void Game::isKingInDanger() {
-	pair<int, int> kingWpos = this->figs->kings.posW;
-	pair<int, int> kingBpos = this->figs->kings.posB;
+	pair<int, int> kingWpos = this->figs->kings.getPosW();
+	pair<int, int> kingBpos = this->figs->kings.getPosB();
 
 	vector<pair<int, int>> whites;
 	vector<pair<int, int>> blacks;
@@ -431,60 +431,60 @@ void Game::isKingInDanger() {
 
 	//  SECTION WHITE POSITIONS //
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('R', Vector2i(figs->rooks.posW[i].first, figs->rooks.posW[i].second));
+		temporary = getValidPositions('R', Vector2i(figs->rooks.getPosW()[i].first, figs->rooks.getPosW()[i].second));
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('K', Vector2i(figs->knights.posW[i].first, figs->knights.posW[i].second));
+		temporary = getValidPositions('K', Vector2i(figs->knights.getPosW()[i].first, figs->knights.getPosW()[i].second));
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('B', Vector2i(figs->bishops.posW[i].first, figs->bishops.posW[i].second));
+		temporary = getValidPositions('B', Vector2i(figs->bishops.getPosW()[i].first, figs->bishops.getPosW()[i].second));
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 8;i++) {
-		temporary = getValidPositions('P', Vector2i(figs->pawns.posW[i].first, figs->pawns.posW[i].second));
+		temporary = getValidPositions('P', Vector2i(figs->pawns.getPosW()[i].first, figs->pawns.getPosW()[i].second));
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
-	for (size_t i = 0;i < this->figs->queens.Wqueens;i++) {
-		temporary = getValidPositions('Q', Vector2i(figs->queens.posW[i].first, figs->queens.posW[i].second));
+	for (size_t i = 0;i < this->figs->queens.getWqueens();i++) {
+		temporary = getValidPositions('Q', Vector2i(figs->queens.posWat(i).first, figs->queens.posWat(i).second));
 		whites.insert(whites.end(), temporary.begin(), temporary.end());
 	}
 
-	temporary = getValidPositions('1', Vector2i(figs->kings.posW.first, figs->kings.posW.second));
+	temporary = getValidPositions('1', Vector2i(figs->kings.getPosW().first, figs->kings.getPosW().second));
 	whites.insert(whites.end(), temporary.begin(), temporary.end());
 
 	// SECTION BLACK POSITIONS //
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('r', Vector2i(figs->rooks.posB[i].first, figs->rooks.posB[i].second));
+		temporary = getValidPositions('r', Vector2i(figs->rooks.getPosB()[i].first, figs->rooks.getPosB()[i].second));
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('k', Vector2i(figs->knights.posB[i].first, figs->knights.posB[i].second));
+		temporary = getValidPositions('k', Vector2i(figs->knights.getPosB()[i].first, figs->knights.getPosB()[i].second));
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 2;i++) {
-		temporary = getValidPositions('b', Vector2i(figs->bishops.posB[i].first, figs->bishops.posB[i].second));
+		temporary = getValidPositions('b', Vector2i(figs->bishops.getPosB()[i].first, figs->bishops.getPosB()[i].second));
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
 	for (size_t i = 0;i < 8;i++) {
-		temporary = getValidPositions('p', Vector2i(figs->pawns.posB[i].first, figs->pawns.posB[i].second));
+		temporary = getValidPositions('p', Vector2i(figs->pawns.getPosB()[i].first, figs->pawns.getPosB()[i].second));
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
-	for (size_t i = 0;i < this->figs->queens.Bqueens;i++) {
-		temporary = getValidPositions('q', Vector2i(figs->queens.posB[i].first, figs->queens.posB[i].second));
+	for (size_t i = 0;i < this->figs->queens.getBqueens();i++) {
+		temporary = getValidPositions('q', Vector2i(figs->queens.posBat(i).first, figs->queens.posBat(i).second));
 		blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 	}
 
-	temporary = getValidPositions('2', Vector2i(figs->kings.posB.first, figs->kings.posB.second));
+	temporary = getValidPositions('2', Vector2i(figs->kings.getPosB().first, figs->kings.getPosB().second));
 	blacks.insert(blacks.end(), temporary.begin(), temporary.end());
 
 	//------------------------------------------------------------------------------//
@@ -492,21 +492,21 @@ void Game::isKingInDanger() {
 	vector<pair<int, int>>::iterator Bdanger = find(whites.begin(), whites.end(), kingBpos);
 
 	if (Wdanger != blacks.end()) {
-		this->figs->kings.inDangerW = 1;
-		this->figs->kings.king[0].setFillColor(Color(252, 3, 119));
+		this->figs->kings.setWinDanger(1);
+		this->figs->kings.getKingAtIndex(0).setFillColor(Color(252, 3, 119));
 	}
 	else {
-		this->figs->kings.inDangerW = 0;
-		this->figs->kings.king[0].setFillColor(Color::White);
+		this->figs->kings.setWinDanger(0);
+		this->figs->kings.getKingAtIndex(0).setFillColor(Color::White);
 	}
 
 	if (Bdanger != whites.end()) {
-		this->figs->kings.inDangerB = 1;
-		this->figs->kings.king[1].setFillColor(Color(252, 3, 119));
+		this->figs->kings.setBinDanger(1);
+		this->figs->kings.getKingAtIndex(1).setFillColor(Color(252, 3, 119));
 	}
 	else {
-		this->figs->kings.inDangerB = 0;
-		this->figs->kings.king[1].setFillColor(Color::White);
+		this->figs->kings.setBinDanger(0);
+		this->figs->kings.getKingAtIndex(1).setFillColor(Color::White);
 	};
 };
 
@@ -517,44 +517,44 @@ void Game::deleteFigure(int& r,int& c) {
 
 		switch (symbol) {
 		case('R'):
-			this->figs->rooks.getRookW(make_pair(r,c)).setPosition(Vector2f(-100,-100));
-			replace(this->figs->rooks.posW.begin(), this->figs->rooks.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->rooks.getRookWatPos(make_pair(r,c)).setPosition(Vector2f(-100,-100));
+			replace(this->figs->rooks.getPosW().begin(), this->figs->rooks.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('r'):
-			this->figs->rooks.getRookB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->rooks.posB.begin(), this->figs->rooks.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->rooks.getRookBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->rooks.getPosB().begin(), this->figs->rooks.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('K'):
-			this->figs->knights.getKnightW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->knights.posW.begin(), this->figs->knights.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->knights.getKnightWatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->knights.getPosW().begin(), this->figs->knights.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('k'):;
-			this->figs->knights.getKnightB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->knights.posB.begin(), this->figs->knights.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->knights.getKnightBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->knights.getPosB().begin(), this->figs->knights.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('B'):
-			this->figs->bishops.getBishopW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->bishops.posW.begin(), this->figs->bishops.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->bishops.getBishopWatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->bishops.getPosW().begin(), this->figs->bishops.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('b'):
-			this->figs->bishops.getBishopB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->bishops.posB.begin(), this->figs->bishops.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->bishops.getBishopBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->bishops.getPosB().begin(), this->figs->bishops.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('P'):
-			this->figs->pawns.getPawnW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->pawns.getPawnWatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.getPosW().begin(), this->figs->pawns.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('p'):
-			this->figs->pawns.getPawnB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->pawns.getPawnBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.getPosB().begin(), this->figs->pawns.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('Q'):
 			this->figs->queens.getQueenW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->queens.posW.begin(), this->figs->queens.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			replace(this->figs->queens.getPosW().begin(), this->figs->queens.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		case('q'):
 			this->figs->queens.getQueenB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->queens.posB.begin(), this->figs->queens.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			replace(this->figs->queens.getPosB().begin(), this->figs->queens.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		}
 	}
@@ -564,29 +564,29 @@ void Game::placeBack(char& symbol,pair<int,int>& oldPos) {
 
 	switch (symbol) {
 	case('R'):
-		this->figs->rooks.getRookW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->rooks.getRookWatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('r'):
 
-		this->figs->rooks.getRookB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->rooks.getRookBatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('K'):
-		this->figs->knights.getKnightW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->knights.getKnightWatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('k'):;
-		this->figs->knights.getKnightB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->knights.getKnightBatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('B'):
-		this->figs->bishops.getBishopW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->bishops.getBishopWatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('b'):
-		this->figs->bishops.getBishopB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->bishops.getBishopBatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('P'):
-		this->figs->pawns.getPawnW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->pawns.getPawnWatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('p'):
-		this->figs->pawns.getPawnB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->pawns.getPawnBatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('Q'):
 		this->figs->queens.getQueenW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
@@ -595,10 +595,10 @@ void Game::placeBack(char& symbol,pair<int,int>& oldPos) {
 		this->figs->queens.getQueenB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('1'):
-		this->figs->kings.getKingW(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->kings.getKingWatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	case('2'):
-		this->figs->kings.getKingB(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
+		this->figs->kings.getKingBatPos(validPositions.front()).setPosition(Vector2f(oldPos.second * 100 + 5, oldPos.first * 100 + 5));
 		break;
 	}
 
@@ -613,84 +613,90 @@ void Game::updateBoardPosition(int& r, int& c) {
 	case('R'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'R';
-		this->figs->rooks.getRookW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->rooks.getRookWatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->rooks.posW.begin(), figs->rooks.posW.end(), oldPos, make_pair(r, c));
+		replace(figs->rooks.getPosW().begin(), figs->rooks.getPosW().end(), oldPos, make_pair(r, c));
 		break;
 	case('r'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'r';
-		this->figs->rooks.getRookB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->rooks.getRookBatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->rooks.posB.begin(), figs->rooks.posB.end(), oldPos, make_pair(r, c));
+		replace(figs->rooks.getPosB().begin(), figs->rooks.getPosB().end(), oldPos, make_pair(r, c));
 		break;
 	case('K'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'K';
-		this->figs->knights.getKnightW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->knights.getKnightWatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->knights.posW.begin(), figs->knights.posW.end(), oldPos, make_pair(r, c));
+		replace(figs->knights.getPosW().begin(), figs->knights.getPosW().end(), oldPos, make_pair(r, c));
 		break;
 	case('k'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'k';
-		this->figs->knights.getKnightB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->knights.getKnightBatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->knights.posB.begin(), figs->knights.posB.end(), oldPos, make_pair(r, c));
+		replace(figs->knights.getPosB().begin(), figs->knights.getPosB().end(), oldPos, make_pair(r, c));
 		break;
 	case('B'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'B';
-		this->figs->bishops.getBishopW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->bishops.getBishopWatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->bishops.posW.begin(), figs->bishops.posW.end(), oldPos, make_pair(r, c));
+		replace(figs->bishops.getPosW().begin(), figs->bishops.getPosW().end(), oldPos, make_pair(r, c));
 		break;
 	case('b'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'b';
-		this->figs->bishops.getBishopB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->bishops.getBishopBatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->bishops.posB.begin(), figs->bishops.posB.end(), oldPos, make_pair(r, c));
+		replace(figs->bishops.getPosB().begin(), figs->bishops.getPosB().end(), oldPos, make_pair(r, c));
 		break;
 	case('P'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'P';
-		this->figs->pawns.getPawnW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->pawns.getPawnWatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->pawns.posW.begin(), figs->pawns.posW.end(), oldPos, make_pair(r, c));
+		replace(figs->pawns.getPosW().begin(), figs->pawns.getPosW().end(), oldPos, make_pair(r, c));
 
 		if (r == 7) {
-			this->figs->pawns.getPawnW(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posW.begin(), this->figs->pawns.posW.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->pawns.getPawnWatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.getPosW().begin(), this->figs->pawns.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 
 			this->figs->board[r][c] = 'Q';
 
-			this->figs->queens.Wqueens++;
-			this->figs->queens.posW[figs->queens.Wqueens - 1] = make_pair(r, c);
-			this->figs->queens.queenW[figs->queens.Wqueens - 1].setSize(Vector2f(90.f, 90.f));
-			this->figs->queens.queenW[figs->queens.Wqueens - 1].setTexture(&this->figs->queens.texture[0]);
-			this->figs->queens.queenW[figs->queens.Wqueens - 1].setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+			this->figs->queens.addWqueen();
+			this->figs->queens.getPosW()[figs->queens.getWqueens() - 1] = make_pair(r, c);
+
+			RectangleShape Q = this->figs->queens.getQueenWatIndex(figs->queens.getWqueens() - 1);
+
+			Q.setSize(Vector2f(90.f, 90.f));
+			Q.setTexture(&this->figs->queens.getWhiteTexture());
+			Q.setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 		}
 
 		break;
 	case('p'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'p';
-		this->figs->pawns.getPawnB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->pawns.getPawnBatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->pawns.posB.begin(), figs->pawns.posB.end(), oldPos, make_pair(r, c));
+		replace(figs->pawns.getPosB().begin(), figs->pawns.getPosB().end(), oldPos, make_pair(r, c));
 
 		if (r == 0) {
-			this->figs->pawns.getPawnB(make_pair(r, c)).setPosition(Vector2f(-100, -100));
-			replace(this->figs->pawns.posB.begin(), this->figs->pawns.posB.end(), make_pair(r, c), make_pair(-10, -10));
+			this->figs->pawns.getPawnBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
+			replace(this->figs->pawns.getPosB().begin(), this->figs->pawns.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 
 			this->figs->board[r][c] = 'q';
 
-			this->figs->queens.Bqueens++;
-			this->figs->queens.posB[figs->queens.Bqueens - 1] = make_pair(r, c);
-			this->figs->queens.queenB[figs->queens.Bqueens - 1].setSize(Vector2f(90.f, 90.f));
-			this->figs->queens.queenB[figs->queens.Bqueens - 1].setTexture(&this->figs->queens.texture[1]);
-			this->figs->queens.queenB[figs->queens.Bqueens - 1].setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+			this->figs->queens.addBqueen();
+			this->figs->queens.getPosB()[figs->queens.getBqueens() - 1] = make_pair(r, c);
+
+			RectangleShape q = this->figs->queens.getQueenBatIndex(figs->queens.getBqueens() - 1);
+
+			q.setSize(Vector2f(90.f, 90.f));
+			q.setTexture(&this->figs->queens.getBlackTexture());
+			q.setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 		}
 
 		break;
@@ -699,67 +705,67 @@ void Game::updateBoardPosition(int& r, int& c) {
 		this->figs->board[r][c] = 'Q';
 		this->figs->queens.getQueenW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->queens.posW.begin(), figs->queens.posW.end(), oldPos, make_pair(r, c));
+		replace(figs->queens.getPosW().begin(), figs->queens.getPosW().end(), oldPos, make_pair(r, c));
 		break;
 	case('q'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = 'q';
 		this->figs->queens.getQueenB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		replace(figs->queens.posB.begin(), figs->queens.posB.end(), oldPos, make_pair(r, c));
+		replace(figs->queens.getPosB().begin(), figs->queens.getPosB().end(), oldPos, make_pair(r, c));
 		break;
 	case('1'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = '1';
-		this->figs->kings.getKingW(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->kings.getKingWatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		this->figs->kings.posW = make_pair(r, c);
+		this->figs->kings.getPosW() = make_pair(r, c);
 
-		if (r == 0 && c == 1 && figs->kings.hasMovedW == 0) {
+		if (r == 0 && c == 1 && figs->kings.gethasWmoved() == 0) {
 			this->figs->board[0][0] = '.';
 			this->figs->board[0][2] = 'R';
-			this->figs->rooks.getRookW(make_pair(0,0)).setPosition(Vector2f(2 * 100 + 5, 0 * 100 + 5));
+			this->figs->rooks.getRookWatPos(make_pair(0,0)).setPosition(Vector2f(2 * 100 + 5, 0 * 100 + 5));
 
-			replace(figs->rooks.posW.begin(), figs->rooks.posW.end(), make_pair(0,0), make_pair(0, 2));
+			replace(figs->rooks.getPosW().begin(), figs->rooks.getPosW().end(), make_pair(0, 0), make_pair(0, 2));
 		}
 
-		if (r == 0 && c == 5 && figs->kings.hasMovedW == 0) {
+		if (r == 0 && c == 5 && figs->kings.gethasWmoved() == 0) {
 			this->figs->board[0][7] = '.';
 			this->figs->board[0][4] = 'R';
-			this->figs->rooks.getRookW(make_pair(0, 7)).setPosition(Vector2f(4 * 100 + 5, 0 * 100 + 5));
+			this->figs->rooks.getRookWatPos(make_pair(0, 7)).setPosition(Vector2f(4 * 100 + 5, 0 * 100 + 5));
 
-			replace(figs->rooks.posW.begin(), figs->rooks.posW.end(), make_pair(0, 7), make_pair(0, 4));
+			replace(figs->rooks.getPosW().begin(), figs->rooks.getPosW().end(), make_pair(0, 7), make_pair(0, 4));
 		}
 		
-		if (this->figs->kings.hasMovedW == 0)
-			this->figs->kings.hasMovedW = 1;
+		if (this->figs->kings.gethasWmoved() == 0)
+			this->figs->kings.sethasWmoved(1);
 
 		break;
 	case('2'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
 		this->figs->board[r][c] = '2';
-		this->figs->kings.getKingB(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+		this->figs->kings.getKingBatPos(validPositions.front()).setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 
-		this->figs->kings.posB = make_pair(r, c);
+		this->figs->kings.getPosB() = make_pair(r, c);
 
-		if (r == 7 && c == 1 && figs->kings.hasMovedB == 0) {
+		if (r == 7 && c == 1 && figs->kings.gethasBmoved() == 0) {
 			this->figs->board[7][0] = '.';
 			this->figs->board[7][2] = 'r';
-			this->figs->rooks.getRookB(make_pair(7, 0)).setPosition(Vector2f(2 * 100 + 5, 7 * 100 + 5));
+			this->figs->rooks.getRookBatPos(make_pair(7, 0)).setPosition(Vector2f(2 * 100 + 5, 7 * 100 + 5));
 
-			replace(figs->rooks.posB.begin(), figs->rooks.posB.end(), make_pair(7, 0), make_pair(7, 2));
+			replace(figs->rooks.getPosB().begin(), figs->rooks.getPosB().end(), make_pair(7, 0), make_pair(7, 2));
 		}
 
-		if (r == 7 && c == 5 && figs->kings.hasMovedB == 0) {
+		if (r == 7 && c == 5 && figs->kings.gethasBmoved() == 0) {
 			this->figs->board[7][7] = '.';
 			this->figs->board[7][4] = 'r';
-			this->figs->rooks.getRookB(make_pair(7, 7)).setPosition(Vector2f(4 * 100 + 5, 7 * 100 + 5));
+			this->figs->rooks.getRookBatPos(make_pair(7, 7)).setPosition(Vector2f(4 * 100 + 5, 7 * 100 + 5));
 
-			replace(figs->rooks.posB.begin(), figs->rooks.posB.end(), make_pair(7, 7), make_pair(7, 4));
+			replace(figs->rooks.getPosB().begin(), figs->rooks.getPosB().end(), make_pair(7, 7), make_pair(7, 4));
 		}
 
-		if (this->figs->kings.hasMovedB == 0)
-			this->figs->kings.hasMovedB = 1;
+		if (this->figs->kings.gethasBmoved() == 0)
+			this->figs->kings.sethasBmoved(1);
 
 		break;
 	}
@@ -772,28 +778,28 @@ void Game::glueFigToMouse(char& symbol) {
 
 	switch (this->pressedFigSymbol) {
 	case('R'):
-		this->figs->rooks.getRookW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->rooks.getRookWatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('r'):
-		this->figs->rooks.getRookB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->rooks.getRookBatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('K'):
-		this->figs->knights.getKnightW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->knights.getKnightWatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('k'):
-		this->figs->knights.getKnightB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->knights.getKnightBatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('B'):
-		this->figs->bishops.getBishopW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->bishops.getBishopWatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('b'):
-		this->figs->bishops.getBishopB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->bishops.getBishopBatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('P'):
-		this->figs->pawns.getPawnW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->pawns.getPawnWatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('p'):
-		this->figs->pawns.getPawnB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->pawns.getPawnBatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('Q'):
 		this->figs->queens.getQueenW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
@@ -802,10 +808,10 @@ void Game::glueFigToMouse(char& symbol) {
 		this->figs->queens.getQueenB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('1'):
-		this->figs->kings.getKingW(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->kings.getKingWatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	case('2'):
-		this->figs->kings.getKingB(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
+		this->figs->kings.getKingBatPos(validPositions.front()).setPosition(Vector2f(mousePosWindow.x - 45, mousePosWindow.y - 45));
 		break;
 	}
 };

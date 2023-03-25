@@ -17,6 +17,26 @@ Queen::Queen() {
 
 }
 
+pair<int, int>& Queen::posWat(int index) { return this->posW[index]; };
+
+pair<int, int>& Queen::posBat(int index) { return this->posB[index]; };
+
+Texture& Queen::getWhiteTexture() { return this->texture[0]; };
+
+Texture& Queen::getBlackTexture() { return this->texture[1]; };
+
+array<pair<int, int>, 8>& Queen::getPosW() { return this->posW; };
+
+array<pair<int, int>, 8>& Queen::getPosB() { return this->posB; };
+
+void Queen::addWqueen() { this->Wqueens++; };
+
+void Queen::addBqueen() { this->Bqueens++; };
+
+int Queen::getWqueens() { return this->Wqueens; };
+
+int Queen::getBqueens() { return this->Bqueens; };
+
 void Queen::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
 	AP.push_back(make_pair(pos.x, pos.y));
@@ -343,18 +363,26 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 
 RectangleShape& Queen::getQueenW(pair<int, int> pos) {
 
-	for (size_t i = 0;i < 5;i++) {
+	for (size_t i = 0;i < 8;i++) {
 		if (posW[i] == pos)
 			return queenW[i];
 	}
 	
 };
 
+RectangleShape& Queen::getQueenWatIndex(int index) {
+	return this->queenW[index];
+};
+
 RectangleShape& Queen::getQueenB(pair<int, int> pos) {
 
-	for (size_t i = 0;i < 5;i++) {
+	for (size_t i = 0;i < 8;i++) {
 		if (posB[i] == pos)
 			return queenB[i];
 	}
 
+};
+
+RectangleShape& Queen::getQueenBatIndex(int index) {
+	return this->queenB[index];
 };

@@ -24,23 +24,54 @@ Rook::Rook() {
 	}
 }
 
-RectangleShape& Rook::getRookW(pair<int,int> pos) {
+array<pair<int, int>, 8>& Rook::getPosW()
+{
+	return this->posW;
+
+}
+
+array<pair<int, int>, 8>& Rook::getPosB()
+{
+	return this->posB;
+}
+
+Texture& Rook::getWhiteTexture()
+{
+	return this->texture[0];
+}
+
+Texture& Rook::getBlackTexture()
+{
+	return this->texture[1];
+}
+
+RectangleShape& Rook::getRookWatPos(pair<int,int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posW[i] == pos)
 			return rookW[i];
 	}
 
-};
+}
 
-RectangleShape& Rook::getRookB(pair<int, int> pos) {
+RectangleShape& Rook::getRookWatIndex(int index)
+{
+	return this->rookW[index];
+}
+
+RectangleShape& Rook::getRookBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posB[i] == pos)
 			return rookB[i];
 	}
 
-};
+}
+
+RectangleShape& Rook::getRookBatIndex(int index)
+{
+	return this->rookB[index];
+}
 
 void Rook::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
