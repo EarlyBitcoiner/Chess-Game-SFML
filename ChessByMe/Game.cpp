@@ -151,9 +151,9 @@ void Game::render() {
 	window->clear();
 	
 	// Draw Board
-	for (size_t r = 0;r < 8;r++) {
-		for (size_t c = 0;c < 8;c++) {
-			window->draw(this->chessBoard->board[r][c]);
+	for (int r = 0;r < 8;r++) {
+		for (int c = 0;c < 8;c++) {
+			window->draw(*this->chessBoard->getBoardBox(r,c));
 		}
 	}
 
@@ -751,6 +751,9 @@ void Game::updateBoardPosition(int& r, int& c) {
 
 	pair<int, int> oldPos = validPositions.front(); // We get the old position of the moved piece.
 
+	this->setDefaultColor();
+	this->setOrangeColor(oldPos.first,oldPos.second,r,c);
+
 	switch (this->pressedFigSymbol) {
 	case('R'):
 		this->figs->board[oldPos.first][oldPos.second] = '.';
@@ -1035,4 +1038,29 @@ Game::~Game() {
 	delete window;
 	delete chessBoard;
 	delete figs;
-};
+}
+
+void Game::setOrangeColor(int& oldPosX, int& oldPosY, int& newPosX, int& newPosY)
+{
+	this->lastMoveTo = make_pair(newPosX,newPosY);
+	this->lastMoveFrom = make_pair(oldPosX, oldPosY);
+	RectangleShape* box = this->chessBoard->getBoardBox(newPosX, newPosY);
+
+	this->lastMoveToColor = box->getFillColor();
+	box->setFillColor(Color(235, 212, 136));
+
+	box = this->chessBoard->getBoardBox(oldPosX, oldPosY);
+
+	this->lastMoveFromColor = box->getFillColor();
+	box->setFillColor(Color(235, 212, 136));
+}
+
+void Game::setDefaultColor()
+{
+	RectangleShape* box = this->chessBoard->getBoardBox(lastMoveTo.first, lastMoveTo.second);
+    box->setFillColor(lastMoveToColor);
+
+	box = this->chessBoard->getBoardBox(lastMoveFrom.first, lastMoveFrom.second);
+	box->setFillColor(lastMoveFromColor);
+}
+;

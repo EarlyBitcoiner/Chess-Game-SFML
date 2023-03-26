@@ -26,3 +26,8 @@ Board::Board() {
 	}
 
 }
+
+RectangleShape* Board::getBoardBox(int& x, int& y)
+{
+	return &this->board[x][y];
+}

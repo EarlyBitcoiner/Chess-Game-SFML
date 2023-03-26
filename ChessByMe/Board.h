@@ -13,13 +13,15 @@ using namespace sf;
 using namespace std;
 
 class Board{
-public:
+private:
 
 	RectangleShape board[8][8];
 
 public:
 
 	Board();
+
+	RectangleShape* getBoardBox(int& x, int& y);
 
 };
 

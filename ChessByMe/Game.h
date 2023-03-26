@@ -23,19 +23,21 @@ private:
 	// Variables 
 	// Window
 	RenderWindow* window;
-	Event mainEv;
-	Vector2i mousePosWindow;
 	Board* chessBoard;
 	Figures* figs;
+	Event mainEv;
+	Vector2i mousePosWindow;
+	vector < pair < int, int > > validPositions; // here we put the valid positions of the piece we have pressed on.
+	pair < int, int > lastMoveTo = make_pair(0, 0);
+	pair < int, int > lastMoveFrom = make_pair(0, 0);
+	Color lastMoveToColor = Color::White;
+	Color lastMoveFromColor = Color::White;
 	Font font;
 	Text text;
 	bool pressedFig = 0;
+	bool weHaveWinner = 0;
 	char pressedFigSymbol;
 	char playerTurn = 'W'; // the first player to take turn is the Whites (W).
-	vector <pair<int, int>> validPositions; // here we put the valid positions of the piece we have pressed on.
-	bool weHaveWinner = 0;
-
-
 	 
 	// Private func
 	void createVar();
@@ -47,6 +49,10 @@ public:
 	Game();
 
 	virtual ~Game();
+
+	void setOrangeColor(int& oldPosX,int& oldPosY,int& newPosX,int& newPosY);
+
+	void setDefaultColor();
 
 	vector<pair<int,int>> getValidPositions(char fig, Vector2i pos); // updates to hold the valid positions for the pressed figure.
 
