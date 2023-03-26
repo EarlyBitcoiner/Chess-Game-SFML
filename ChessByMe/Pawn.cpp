@@ -25,6 +25,31 @@ Pawn::Pawn() {
 
 }
 
+pair<int, int>& Pawn::getEnPassantPawnPos()
+{
+	return this->enPassantPawnPos;
+}
+
+void Pawn::setEnPassantPawnPos( pair<int,int> pos)
+{
+	this->enPassantPawnPos = pos;
+}
+
+bool Pawn::getEnPassant()
+{
+	return this->enPassant;
+}
+
+void Pawn::raiseEnPassant()
+{
+	this->enPassant = 1;
+}
+
+void Pawn::lowerEnPassant()
+{
+	this->enPassant = 0;
+}
+
 array<pair<int, int>, 8>& Pawn::getPosW()
 {
 	return this->posW;
@@ -60,7 +85,12 @@ void Pawn::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 	if (pos.x + 1 >= 0 && pos.y - 1 >= 0 && (board[pos.x + 1][pos.y - 1] >= 97 && board[pos.x + 1][pos.y - 1] <= 122 || board[pos.x + 1][pos.y - 1] == '2'))
 		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
 
+	// checking if en passant is possible.
+	if (pos.y + 1 < 8 && board[pos.x][pos.y + 1] == 'p' && make_pair(pos.x, pos.y + 1) == this->enPassantPawnPos && this->enPassant)
+		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
 
+	if (pos.y - 1 >= 0 && board[pos.x][pos.y - 1] == 'p' && make_pair(pos.x, pos.y - 1) == this->enPassantPawnPos && this->enPassant)
+		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
 };
 
 void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
@@ -77,6 +107,13 @@ void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 	if (pos.x - 1 >= 0 && pos.y + 1 >= 0 && (board[pos.x - 1][pos.y + 1] >= 65 && board[pos.x - 1][pos.y + 1] <= 90 || board[pos.x - 1][pos.y + 1] == '1'))
 		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
+
+	// checking if en passant is possible.
+	if (pos.y + 1 < 8 && board[pos.x][pos.y + 1] == 'P' && make_pair(pos.x, pos.y + 1) == this->enPassantPawnPos && this->enPassant)
+		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
+
+	if (pos.y - 1 >= 0 && board[pos.x][pos.y - 1] == 'P' && make_pair(pos.x, pos.y - 1) == this->enPassantPawnPos && this->enPassant)
+		AP.push_back(make_pair(pos.x - 1, pos.y - 1));
 };
 
 RectangleShape& Pawn::getPawnWatPos(pair<int, int> pos) {

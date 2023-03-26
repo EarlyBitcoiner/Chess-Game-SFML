@@ -19,9 +19,22 @@ private:
 	RectangleShape pawnW[8];
 	RectangleShape pawnB[8];
 
+	bool enPassant = 0; // if value is 1 then en passant move is available.
+	pair<int, int> enPassantPawnPos; // here we will keep the position of the last pawn which is in danger of en passant.
+
 public:
 
 	Pawn();
+
+	pair<int, int>& getEnPassantPawnPos();
+
+	void setEnPassantPawnPos(pair<int, int> pos);
+
+	bool getEnPassant();
+
+	void raiseEnPassant();
+
+	void lowerEnPassant();
 
 	array<pair<int, int>, 8>& getPosW();
 

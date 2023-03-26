@@ -370,8 +370,8 @@ RectangleShape& Queen::getQueenW(pair<int, int> pos) {
 	
 };
 
-RectangleShape& Queen::getQueenWatIndex(int index) {
-	return this->queenW[index];
+RectangleShape* Queen::getQueenWatIndex(int index) {
+	return &this->queenW[index];
 };
 
 RectangleShape& Queen::getQueenB(pair<int, int> pos) {
@@ -383,6 +383,6 @@ RectangleShape& Queen::getQueenB(pair<int, int> pos) {
 
 };
 
-RectangleShape& Queen::getQueenBatIndex(int index) {
-	return this->queenB[index];
+RectangleShape* Queen::getQueenBatIndex(int index) {
+	return &this->queenB[index];
 };

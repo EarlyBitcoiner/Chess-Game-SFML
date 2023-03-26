@@ -8,100 +8,16 @@ void Game::poolEvents() {
 
 	while (this->window->pollEvent(mainEv)) { // we stay here until all events are gone through.
 
-		if (this->mainEv.type == Event::Closed) {
-			this->window->close(); break;
-		}  // this condition is true only if we press the X of the window to close it. 
+		if (this->mainEv.type == Event::Closed)
+			this->window->close(); // this condition is true only if we press the X of the window to close it. 
 
-		if (this->mainEv.type == Event::MouseButtonPressed && this->mainEv.mouseButton.button == Mouse::Left) {
+		if (this->mainEv.type == Event::MouseButtonPressed && this->mainEv.mouseButton.button == Mouse::Left)
+			ExecMouseButtonPressedLogic();
 
-			this->mousePosWindow.x = mainEv.mouseButton.x;
-			this->mousePosWindow.y = mainEv.mouseButton.y;
-
-			int r=0, c=0;
-
-			mouseIndex(r, c, mousePosWindow); // returns the board index on which the mouse happen to be when called by assigning it in r and c.
-
-			if (playerTurn == 'W' && (figs->board[r][c] >= 98 && figs->board[r][c] <= 122 || figs->board[r][c] == '2'))
-				break;
-			else if (playerTurn == 'B' && (figs->board[r][c] >= 65 && figs->board[r][c] <= 90 || figs->board[r][c] == '1'))
-				break;
-			else if (playerTurn == '.')
-				break;
-
-			if (figs->board[r][c] != '.') {
-				this->pressedFig = 1; // by setting the value 1 we now know that the player pressed on a figure and will maybe drag it.
-				this->pressedFigSymbol = figs->board[r][c]; //we get the symbol to know with what figure we have to work.
-				this->validPositions = getValidPositions(figs->board[r][c], Vector2i(r, c)); // we get the valid position on which the pressed figure can move.
-			}
-
-		}
-
-		if (this->mainEv.type == Event::MouseButtonReleased && this->mainEv.mouseButton.button == Mouse::Left && pressedFig == 1) {
-			
-			this->pressedFig = 0;
-			this->mousePosWindow.x = mainEv.mouseButton.x;
-			this->mousePosWindow.y = mainEv.mouseButton.y;
-			int r = 0, c = 0; 
-			
-			mouseIndex(r, c, mousePosWindow); // returns the index of the board on which the mouse happen to be when called.
-			vector<pair<int, int>>::iterator it = validPositions.begin();
-
-			while (it != validPositions.end()) {
-				it++;
-
-				if (it == validPositions.end()) {
-					pair<int, int> oldPos = validPositions.front();
-
-					placeBack(this->pressedFigSymbol, oldPos); // places the figure's texture back on it's position after draging it with the mouse.
-					break;
-				}
-
-				if (*it == make_pair(r, c)) {
-
-					if (isNextMoveValid(r,c,validPositions[0])) {
-
-						deleteFigure(r, c); // removes a figure drawable capabilities if taken by another figure.(just sets the position to -100,-100)
-						updateBoardPosition(r, c); // updates the board based on the moved figure and renders the figure on its new place.
-
-						isKingInDanger();
-
-						(playerTurn == 'W') ? playerTurn = 'B' : playerTurn = 'W'; // if we arrive here that means the player which turn it is has made a valid move and now we change turns.
-
-						if (this->figs->kings.getWinDanger()) {
-							if (checkMate()) {
-								this->text.setString("Black Wins!");
-								playerTurn = '.';
-								weHaveWinner = 1;
-								break;
-							};
-						}
-						else if (this->figs->kings.getBinDanger()) {
-							if (checkMate()) {
-								this->text.setString("White Wins!");
-								playerTurn = '.';
-								weHaveWinner = 1;
-								break;
-							};
-						}
-
-						break;
-					}
-					else {
-						pair<int, int> oldPos = validPositions.front();
-						placeBack(this->pressedFigSymbol, oldPos);
-
-						break;
-					}
-
-				}
-			}
-
-			this->pressedFigSymbol = '0';
-			this->validPositions.clear();
-		}
-		else if (this->pressedFig == 1) { // We constantly go through this [else if] when we are dragging a figure.
+		if (this->mainEv.type == Event::MouseButtonReleased && this->mainEv.mouseButton.button == Mouse::Left && pressedFig == 1)
+			ExecMouseButtonReleasedLogic();
+		else if (this->pressedFig == 1) // We constantly go through this [else if] when we are dragging a figure.
 			glueFigToMouse(this->pressedFigSymbol); // glues the pressed figure to the mouse cursor until the button is released.
-		}
 	}
 
 }
@@ -154,6 +70,76 @@ vector<pair<int,int>> Game::getValidPositions(char fig,Vector2i pos) {
 
 };
 
+void Game::ExecMouseButtonPressedLogic() {
+
+	this->mousePosWindow.x = mainEv.mouseButton.x;
+	this->mousePosWindow.y = mainEv.mouseButton.y;
+
+	int r = 0, c = 0;
+
+	mouseIndex(r, c, mousePosWindow); // returns the board index on which the mouse happen to be when called by assigning it in r and c.
+
+	if (playerTurn == 'W' && (figs->board[r][c] >= 98 && figs->board[r][c] <= 122 || figs->board[r][c] == '2'))
+		return;
+	else if (playerTurn == 'B' && (figs->board[r][c] >= 65 && figs->board[r][c] <= 90 || figs->board[r][c] == '1'))
+		return;
+	else if (playerTurn == '.')
+		return;
+
+	if (figs->board[r][c] != '.') {
+		this->pressedFig = 1; // by setting the value 1 we now know that the player pressed on a figure and will maybe drag it.
+		this->pressedFigSymbol = figs->board[r][c]; //we get the symbol to know with what figure we have to work.
+		this->validPositions = getValidPositions(figs->board[r][c], Vector2i(r, c)); // we get the valid position on which the pressed figure can move.
+	}
+
+};
+
+void Game::ExecMouseButtonReleasedLogic() {
+	this->pressedFig = 0;
+	this->mousePosWindow.x = mainEv.mouseButton.x;
+	this->mousePosWindow.y = mainEv.mouseButton.y;
+	int r = 0, c = 0;
+
+	mouseIndex(r, c, mousePosWindow); // returns the index of the board on which the mouse happen to be when called.
+	vector<pair<int, int>>::iterator it = validPositions.begin();
+
+	while (it != validPositions.end()) {
+		it++;
+
+		if (it == validPositions.end()) {
+			pair<int, int> oldPos = validPositions.front();
+
+			placeBack(this->pressedFigSymbol, oldPos); // places the figure's texture back on it's position after draging it with the mouse.
+			break;
+		}
+
+		if (*it == make_pair(r, c)) {
+
+			if (checkIfNextMoveIsValid(r, c, validPositions[0])) {
+
+				deleteFigure(r, c); // removes a figure drawable capabilities if taken by another figure.(just sets the position to -100,-100)
+				updateBoardPosition(r, c); // updates the board based on the moved figure and renders the figure on its new place.
+
+				checkIfKingIsInDanger();
+
+				(playerTurn == 'W') ? playerTurn = 'B' : playerTurn = 'W'; // if we arrive here that means the player which turn it is has made a valid move and now we change turns.
+				break;
+			}
+			else {
+
+				pair<int, int> oldPos = validPositions.front();
+				placeBack(this->pressedFigSymbol, oldPos);
+
+				break;
+			}
+
+		}
+	}
+
+	this->pressedFigSymbol = '0';
+	this->validPositions.clear();
+};
+
 void Game::update() {
 
 	poolEvents();
@@ -173,11 +159,11 @@ void Game::render() {
 
 	// Draw Figures
 	for (size_t i = 0;i < 8;i++) {
-		window->draw(figs->queens.getQueenWatIndex(i));
+		window->draw(*figs->queens.getQueenWatIndex(i));
 	}
 
 	for (size_t i = 0;i < 8;i++) {
-		window->draw(figs->queens.getQueenBatIndex(i));
+		window->draw(*figs->queens.getQueenBatIndex(i));
 	}
 
 	for (size_t i = 0;i < 2;i++) {
@@ -217,7 +203,7 @@ bool Game::isRunning() {
 	return window->isOpen();
 };
 
-bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
+bool Game::checkIfNextMoveIsValid(int r, int c, pair<int,int> pos) {
 	char boardCopy[8][8]; // making a variable to the board.
 
 	// copying the board.
@@ -311,9 +297,143 @@ bool Game::isNextMoveValid(int r, int c, pair<int,int> pos) {
 
 	// if we haven't returned false until now then the move is valid and our king is not in danger so we return true.
 	return true;
-};
+}
 
-bool Game::checkMate() {
+void Game::checkIfGameEnded()
+{
+	if (this->figs->kings.getWinDanger()) {
+		if (checkForCheckMate()) {
+			this->text.setString("Black Wins!");
+			playerTurn = '.';
+			weHaveWinner = 1;
+			return;
+		};
+	}
+	else if (this->figs->kings.getBinDanger()) {
+		if (checkForCheckMate()) {
+			this->text.setString("White Wins!");
+			playerTurn = '.';
+			weHaveWinner = 1;
+			return;
+		};
+	}
+	else if (this->figs->kings.getWinDanger() == 0 && this->figs->kings.getBinDanger() == 0) {
+		if (checkForStaleMate()) {
+			this->text.setString("STALEMATE");
+			playerTurn = '.';
+			weHaveWinner = 1;
+			return;
+		}
+	}
+}
+
+bool Game::checkForStaleMate() {
+	vector <pair<int, int>> curr; // use this vector to iterate through the board and store the available positions of figure we iterate.
+
+	if (figs->kings.getWinDanger() == 0) {
+
+		for (int j = 0;j < 8;j++) {
+			for (int k = 0;k < 8;k++) {
+				// we only do switch case for position with figure on it.
+				if (this->figs->board[j][k] != '.') {
+					// get the possible moves of the figure on the current position and saving them in the vector [current].
+					switch (figs->board[j][k]) {
+					case 'R':
+						this->figs->rooks.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'K':
+						this->figs->knights.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'B':
+						this->figs->bishops.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'P':
+						this->figs->pawns.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'Q':
+						this->figs->queens.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case '1':
+						this->figs->kings.GetAvailablePosW(this->figs->board, Vector2i(j, k), curr);
+						break;
+					}
+
+					// checking if the vector current has any positions in it. We check bigger than 1 because there will be
+					// always 1 position in it (of the figure we are checking).
+					if (curr.size() > 1) {
+
+						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
+
+							if (checkIfNextMoveIsValid(it->first, it->second, curr.front())) {
+								return false;
+							}
+
+						}
+
+					}
+
+					// emptying the vector for the next iteartion
+					curr.clear();
+				}
+			}
+		}
+
+		return true;
+	}
+
+	if (figs->kings.getBinDanger() == 0) {
+
+		for (int j = 0;j < 8;j++) {
+			for (int k = 0;k < 8;k++) {
+				// we only do switch case for position with figure on it.
+				if (this->figs->board[j][k] != '.') {
+					// get the possible moves of the figure on the current position and saving them in the vector [current].
+					switch (figs->board[j][k]) {
+					case 'r':
+						this->figs->rooks.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'k':
+						this->figs->knights.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'b':
+						this->figs->bishops.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'p':
+						this->figs->pawns.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case 'q':
+						this->figs->queens.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					case '2':
+						this->figs->kings.GetAvailablePosB(this->figs->board, Vector2i(j, k), curr);
+						break;
+					}
+
+					// checking if the vector current has any positions in it. We check bigger than 1 because there will be
+					// always 1 position in it (of the figure we are checking).
+					if (curr.size() > 1) {
+
+						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
+
+							if (checkIfNextMoveIsValid(it->first, it->second, curr.front())) {
+								return false;
+							}
+
+						}
+
+					}
+
+					// emptying the vector for the next iteartion
+					curr.clear();
+				}
+			}
+		}
+
+		return true;
+	}
+}
+
+bool Game::checkForCheckMate() {
 
 	vector <pair<int, int>> curr; // use this vector to iterate through the board and store the available positions of figure we iterate.
 
@@ -351,7 +471,7 @@ bool Game::checkMate() {
 
 						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
 
-							if (isNextMoveValid(it->first, it->second, curr.front())) {
+							if (checkIfNextMoveIsValid(it->first, it->second, curr.front())) {
 								return false;
 							}
 
@@ -402,7 +522,7 @@ bool Game::checkMate() {
 
 						for (vector<pair<int, int>>::iterator it = curr.begin() + 1; it != curr.end(); it++) {
 
-							if (isNextMoveValid(it->first, it->second, curr.front())) {
+							if (checkIfNextMoveIsValid(it->first, it->second, curr.front())) {
 								return false;
 							}
 
@@ -420,7 +540,7 @@ bool Game::checkMate() {
 	}
 }
 
-void Game::isKingInDanger() {
+void Game::checkIfKingIsInDanger() {
 	pair<int, int> kingWpos = this->figs->kings.getPosW();
 	pair<int, int> kingBpos = this->figs->kings.getPosB();
 
@@ -512,6 +632,7 @@ void Game::isKingInDanger() {
 
 void Game::deleteFigure(int& r,int& c) {
 
+	// condition != "." (TRUE) means that we have moved to a position on the board containing other figure so we have to delete it before updating the board. condition == "." (FALSE) means that we have moved to an empty position and quickly do the 2 else if's below then directly skip to the updateBoardPosition() function.
 	if (figs->board[r][c] != '.') {
 		char symbol = figs->board[r][c];
 
@@ -557,6 +678,27 @@ void Game::deleteFigure(int& r,int& c) {
 			replace(this->figs->queens.getPosB().begin(), this->figs->queens.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 			break;
 		}
+
+	} // the extra else if condition below are to delete the pawn taken by en passant move. We need this else if's because en passant move need specific logic which we cant put in the switch case above.
+	else if(this->pressedFigSymbol == 'P' && figs->board[r - 1][c] == 'p') { 
+
+		// this is true if we have made en passant move (if there is a black pawn behind our white pawn).
+
+		this->figs->pawns.getPawnBatPos(figs->pawns.getEnPassantPawnPos()).setPosition(Vector2f(-100, -100));
+
+		replace(this->figs->pawns.getPosB().begin(), this->figs->pawns.getPosB().end(), figs->pawns.getEnPassantPawnPos(), make_pair(-10, -10));
+
+		figs->board[r - 1][c] = '.';// setting the position behind our pawn to empty because the updateBoardPosition() can not do it for us when the move is en passant.
+	}
+	else if (this->pressedFigSymbol == 'p' && figs->board[r + 1][c] == 'P') {
+
+		// this is true if we have made en passant move(if there is a white pawn behind our black pawn).
+
+		this->figs->pawns.getPawnWatPos(figs->pawns.getEnPassantPawnPos()).setPosition(Vector2f(-100, -100));
+
+		replace(this->figs->pawns.getPosW().begin(), this->figs->pawns.getPosW().end(), figs->pawns.getEnPassantPawnPos(), make_pair(-10, -10));
+
+		figs->board[r + 1][c] = '.'; // setting the position behind our pawn to empty because the updateBoardPosition() can not do it for us when the move is en passant.
 	}
 };
 
@@ -605,9 +747,9 @@ void Game::placeBack(char& symbol,pair<int,int>& oldPos) {
 }
 
 void Game::updateBoardPosition(int& r, int& c) {
-	//r stand for row and c stands for column.
+	//r stand for row and c stands for column. We need them to know the position of which the player wants to move the draged piece.
 
-	pair<int, int> oldPos = validPositions.front();
+	pair<int, int> oldPos = validPositions.front(); // We get the old position of the moved piece.
 
 	switch (this->pressedFigSymbol) {
 	case('R'):
@@ -659,7 +801,19 @@ void Game::updateBoardPosition(int& r, int& c) {
 
 		replace(figs->pawns.getPosW().begin(), figs->pawns.getPosW().end(), oldPos, make_pair(r, c));
 
+		if (oldPos.first + 2 == r && oldPos.second == c) {
+			// condition checks if the made move puts the pawn 2 postions forward. If TRUE then the pawn is now in En Passant so we raise the indicator and save the pawn position to help us calculate the next moves for the enemy pawns. If FALSE we skip to the else where we lower the indicator saying the pawn is in En Passant danger.
+
+			figs->pawns.raiseEnPassant();
+			figs->pawns.setEnPassantPawnPos(make_pair(r, c));
+		}
+		else {
+			figs->pawns.lowerEnPassant();
+		}
+
 		if (r == 7) {
+			// condition TRUE when WHITE has arrived to the end of the board with out pawn. Now we execute the code below creating the player a Queen.
+
 			this->figs->pawns.getPawnWatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
 			replace(this->figs->pawns.getPosW().begin(), this->figs->pawns.getPosW().end(), make_pair(r, c), make_pair(-10, -10));
 
@@ -668,11 +822,11 @@ void Game::updateBoardPosition(int& r, int& c) {
 			this->figs->queens.addWqueen();
 			this->figs->queens.getPosW()[figs->queens.getWqueens() - 1] = make_pair(r, c);
 
-			RectangleShape Q = this->figs->queens.getQueenWatIndex(figs->queens.getWqueens() - 1);
+			RectangleShape* Q = this->figs->queens.getQueenWatIndex(figs->queens.getWqueens() - 1);
 
-			Q.setSize(Vector2f(90.f, 90.f));
-			Q.setTexture(&this->figs->queens.getWhiteTexture());
-			Q.setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+			Q->setSize(Vector2f(90.f, 90.f));
+			Q->setTexture(&this->figs->queens.getWhiteTexture());
+			Q->setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 		}
 
 		break;
@@ -683,7 +837,19 @@ void Game::updateBoardPosition(int& r, int& c) {
 
 		replace(figs->pawns.getPosB().begin(), figs->pawns.getPosB().end(), oldPos, make_pair(r, c));
 
+		if (oldPos.first - 2 == r && oldPos.second == c) {
+			// condition checks if the made move puts the pawn 2 postions forward. If TRUE then the pawn is now in En Passant so we raise the indicator and save the pawn position to help us calculate the next moves for the enemy pawns. If FALSE we skip to the else where we lower the indicator saying the pawn is in En Passant danger.
+
+			figs->pawns.raiseEnPassant();
+			figs->pawns.setEnPassantPawnPos(make_pair(r, c));
+		}
+		else {
+			figs->pawns.lowerEnPassant();
+		}
+
 		if (r == 0) {
+			// condition TRUE when BLACK has arrived to the end of the board with out pawn. Now we execute the code below creating the player a Queen.
+
 			this->figs->pawns.getPawnBatPos(make_pair(r, c)).setPosition(Vector2f(-100, -100));
 			replace(this->figs->pawns.getPosB().begin(), this->figs->pawns.getPosB().end(), make_pair(r, c), make_pair(-10, -10));
 
@@ -692,11 +858,11 @@ void Game::updateBoardPosition(int& r, int& c) {
 			this->figs->queens.addBqueen();
 			this->figs->queens.getPosB()[figs->queens.getBqueens() - 1] = make_pair(r, c);
 
-			RectangleShape q = this->figs->queens.getQueenBatIndex(figs->queens.getBqueens() - 1);
+			RectangleShape* q = this->figs->queens.getQueenBatIndex(figs->queens.getBqueens() - 1);
 
-			q.setSize(Vector2f(90.f, 90.f));
-			q.setTexture(&this->figs->queens.getBlackTexture());
-			q.setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
+			q->setSize(Vector2f(90.f, 90.f));
+			q->setTexture(&this->figs->queens.getBlackTexture());
+			q->setPosition(Vector2f(c * 100 + 5, r * 100 + 5));
 		}
 
 		break;

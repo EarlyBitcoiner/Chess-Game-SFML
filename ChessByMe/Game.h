@@ -54,19 +54,27 @@ public:
 
 	void poolEvents(); // grabs the events.
 
+	void ExecMouseButtonPressedLogic();
+
+	void ExecMouseButtonReleasedLogic();
+
 	void update(); // takes the last event and acts upon it.
 
 	void updateMousePos(); // updates the mouse position(x,y).
 
 	void render(); // erases and displays the new frame after drawing the it.
 
-	void isKingInDanger(); // tells us if the king is in danger.
+	void checkIfKingIsInDanger(); // tells us if the king is in danger.
 
 	void deleteFigure(int&, int&); // removes a figure drawable capabilities if taken by another figure.(just sets the position to -100,-100)
 
-	bool isNextMoveValid(int r,int c,pair<int,int>); // Does a simulation of the next move and decides it's validity based on whether the king will be put in danger. If you put your own king in danger then it is invalid. If your king is check and you make a move not putting it out of check it is invalid.
+	bool checkIfNextMoveIsValid(int r,int c,pair<int,int>); // Does a simulation of the next move and decides it's validity based on whether the king will be put in danger. If you put your own king in danger then it is invalid. If your king is check and you make a move not putting it out of check it is invalid.
 
-	bool checkMate();
+	void checkIfGameEnded(); // Here we check if the we have a winner or a draw.
+
+	bool checkForStaleMate(); // We check for draw
+
+	bool checkForCheckMate(); // We check if a king is in check mate.
 
 	void placeBack(char&,pair<int,int>&); // places the figure's texture back on it's position after draging it with the mouse.
 

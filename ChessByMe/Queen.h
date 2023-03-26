@@ -51,11 +51,11 @@ public:
 
 	RectangleShape& getQueenW(pair<int, int>);
 
-	RectangleShape& getQueenWatIndex(int index);
+	RectangleShape* getQueenWatIndex(int index);
 
 	RectangleShape& getQueenB(pair<int, int>);
 
-	RectangleShape& getQueenBatIndex(int index);
+	RectangleShape* getQueenBatIndex(int index);
 
 };
 
