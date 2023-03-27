@@ -1,33 +1,33 @@
 #include "Queen.h"
 
 Queen::Queen() {
-	this->posW[0] = make_pair(0, 4);
-	this->posB[0] = make_pair(7, 4);
+	this->posWhites[0] = make_pair(0, 4);
+	this->posBlacks[0] = make_pair(7, 4);
 
 	this->texture[0].loadFromFile("Textures/w_queen.png"); // white piece is first
 	this->texture[1].loadFromFile("Textures/b_queen.png"); // black piece is second
 
 	this->queenW[0].setSize(Vector2f(90.f, 90.f));
 	this->queenW[0].setTexture(&texture[0]);
-	this->queenW[0].setPosition(Vector2f(posW[0].second * 100 + 5, posW[0].first * 100 + 5));
+	this->queenW[0].setPosition(Vector2f(posWhites[0].second * 100 + 5, posWhites[0].first * 100 + 5));
 
 	this->queenB[0].setSize(Vector2f(90.f, 90.f));
 	this->queenB[0].setTexture(&texture[1]);
-	this->queenB[0].setPosition(Vector2f(posB[0].second * 100 + 5, posB[0].first * 100 + 5));
+	this->queenB[0].setPosition(Vector2f(posBlacks[0].second * 100 + 5, posBlacks[0].first * 100 + 5));
 
 }
 
-pair<int, int>& Queen::posWat(int index) { return this->posW[index]; };
+pair<int, int>& Queen::posWat(int index) { return this->posWhites[index]; };
 
-pair<int, int>& Queen::posBat(int index) { return this->posB[index]; };
+pair<int, int>& Queen::posBat(int index) { return this->posBlacks[index]; };
 
 Texture& Queen::getWhiteTexture() { return this->texture[0]; };
 
 Texture& Queen::getBlackTexture() { return this->texture[1]; };
 
-array<pair<int, int>, 8>& Queen::getPosW() { return this->posW; };
+array<pair<int, int>, 8>& Queen::getPosW() { return this->posWhites; };
 
-array<pair<int, int>, 8>& Queen::getPosB() { return this->posB; };
+array<pair<int, int>, 8>& Queen::getPosB() { return this->posBlacks; };
 
 void Queen::addWqueen() { this->Wqueens++; };
 
@@ -364,7 +364,7 @@ void Queen::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, in
 RectangleShape& Queen::getQueenW(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posW[i] == pos)
+		if (posWhites[i] == pos)
 			return queenW[i];
 	}
 	
@@ -377,7 +377,7 @@ RectangleShape* Queen::getQueenWatIndex(int index) {
 RectangleShape& Queen::getQueenB(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posB[i] == pos)
+		if (posBlacks[i] == pos)
 			return queenB[i];
 	}
 

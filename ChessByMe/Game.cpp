@@ -1019,7 +1019,7 @@ void Game::setWindow() {
 	ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
-	this->window = new RenderWindow(VideoMode(800, 800), "Classic Chess", Style::Titlebar | Style::Close,settings);
+	this->window = new RenderWindow(VideoMode(800, 800), "Classic Chess", Style::Titlebar | Style::Close, settings );
 
 	window->setFramerateLimit(144);
 };
@@ -1047,12 +1047,12 @@ void Game::setOrangeColor(int& oldPosX, int& oldPosY, int& newPosX, int& newPosY
 	RectangleShape* box = this->chessBoard->getBoardBox(newPosX, newPosY);
 
 	this->lastMoveToColor = box->getFillColor();
-	box->setFillColor(Color(235, 212, 136));
+	box->setFillColor(Color(255, 129, 3));
 
 	box = this->chessBoard->getBoardBox(oldPosX, oldPosY);
 
 	this->lastMoveFromColor = box->getFillColor();
-	box->setFillColor(Color(235, 212, 136));
+	box->setFillColor(Color(255, 129, 3));
 }
 
 void Game::setDefaultColor()

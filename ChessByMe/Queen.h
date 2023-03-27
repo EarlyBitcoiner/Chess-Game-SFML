@@ -13,8 +13,8 @@ using namespace sf;
 
 class Queen {
 private:
-	array<pair<int, int>, 8> posW;
-	array<pair<int, int>, 8> posB;
+	array<pair<int, int>, 8> posWhites;
+	array<pair<int, int>, 8> posBlacks;
 	Texture texture[2];
 	RectangleShape queenW[8];
 	RectangleShape queenB[8];

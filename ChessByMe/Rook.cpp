@@ -2,8 +2,8 @@
 
 Rook::Rook() {
 	
-	this->posW[0] = (make_pair(0, 0)); this->posW[1] = (make_pair(0, 7));
-	this->posB[0] = (make_pair(7, 0)); this->posB[1] = (make_pair(7, 7));
+	this->posWhites[0] = (make_pair(0, 0)); this->posWhites[1] = (make_pair(0, 7));
+	this->posBlacks[0] = (make_pair(7, 0)); this->posBlacks[1] = (make_pair(7, 7));
 
 	texture[0].loadFromFile("Textures/w_rook.png"); // white piece is first
 	texture[1].loadFromFile("Textures/b_rook.png"); // black piece is second
@@ -19,20 +19,20 @@ Rook::Rook() {
 	rookB[1] = rookB[0];
 
 	for (size_t i = 0;i < 2;i++) {
-		rookW[i].setPosition(Vector2f(posW[i].second * 100 + 5, posW[i].first * 100 + 5));
-		rookB[i].setPosition(Vector2f(posB[i].second * 100 + 5, posB[i].first * 100 + 5));
+		rookW[i].setPosition(Vector2f(posWhites[i].second * 100 + 5, posWhites[i].first * 100 + 5));
+		rookB[i].setPosition(Vector2f(posBlacks[i].second * 100 + 5, posBlacks[i].first * 100 + 5));
 	}
 }
 
 array<pair<int, int>, 8>& Rook::getPosW()
 {
-	return this->posW;
+	return this->posWhites;
 
 }
 
 array<pair<int, int>, 8>& Rook::getPosB()
 {
-	return this->posB;
+	return this->posBlacks;
 }
 
 Texture& Rook::getWhiteTexture()
@@ -48,7 +48,7 @@ Texture& Rook::getBlackTexture()
 RectangleShape& Rook::getRookWatPos(pair<int,int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posW[i] == pos)
+		if (posWhites[i] == pos)
 			return rookW[i];
 	}
 
@@ -62,7 +62,7 @@ RectangleShape& Rook::getRookWatIndex(int index)
 RectangleShape& Rook::getRookBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posB[i] == pos)
+		if (posBlacks[i] == pos)
 			return rookB[i];
 	}
 

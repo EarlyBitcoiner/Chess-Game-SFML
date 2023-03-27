@@ -2,8 +2,8 @@
 
 Pawn::Pawn() {
 	for (size_t i = 0;i < 8;i++) {
-		posW[i] = (make_pair(1, i));
-		posB[i] = (make_pair(6,i));
+		posWhites[i] = (make_pair(1, i));
+		posBlacks[i] = (make_pair(6,i));
 	}
 
 	texture[0].loadFromFile("Textures/w_pawn.png"); // white piece is first
@@ -12,13 +12,13 @@ Pawn::Pawn() {
 	for (size_t i = 0;i < 8;i++) {
 		pawnW[i].setTexture(&texture[0]);
 		pawnW[i].setSize(Vector2f(90.f, 90.f));
-		pawnW[i].setPosition(Vector2f(posW[i].second * 100 + 5, posW[i].first * 100 + 5));
+		pawnW[i].setPosition(Vector2f(posWhites[i].second * 100 + 5, posWhites[i].first * 100 + 5));
 	}
 
 	for (size_t i = 0;i < 8;i++) {
 		pawnB[i].setTexture(&texture[1]);
 		pawnB[i].setSize(Vector2f(90.f, 90.f));
-		pawnB[i].setPosition(Vector2f(posB[i].second * 100 + 5, posB[i].first * 100 + 5));
+		pawnB[i].setPosition(Vector2f(posBlacks[i].second * 100 + 5, posBlacks[i].first * 100 + 5));
 	}
 	
 
@@ -52,12 +52,12 @@ void Pawn::lowerEnPassant()
 
 array<pair<int, int>, 8>& Pawn::getPosW()
 {
-	return this->posW;
+	return this->posWhites;
 }
 
 array<pair<int, int>, 8>& Pawn::getPosB()
 {
-	return this->posB;
+	return this->posBlacks;
 }
 
 Texture& Pawn::getWhiteTexture()
@@ -119,7 +119,7 @@ void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 RectangleShape& Pawn::getPawnWatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posW[i] == pos)
+		if (posWhites[i] == pos)
 			return pawnW[i];
 	}
 
@@ -133,7 +133,7 @@ RectangleShape& Pawn::getPawnWatIndex(int index)
 RectangleShape& Pawn::getPawnBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posB[i] == pos)
+		if (posBlacks[i] == pos)
 			return pawnB[i];
 	}
 

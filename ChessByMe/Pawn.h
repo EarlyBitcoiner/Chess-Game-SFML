@@ -13,8 +13,8 @@ using namespace sf;
 
 class Pawn {
 private:
-	array<pair<int, int>, 8> posW; // starting positions of white pawns
-	array<pair<int, int>, 8> posB; // starting positions of black pawns
+	array<pair<int, int>, 8> posWhites; // starting positions of white pawns
+	array<pair<int, int>, 8> posBlacks; // starting positions of black pawns
 	Texture texture[2];
 	RectangleShape pawnW[8];
 	RectangleShape pawnB[8];

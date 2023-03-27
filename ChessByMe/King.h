@@ -13,8 +13,8 @@ using namespace sf;
 class King {
 private:
 
-	pair<int, int> posW = make_pair(0,3); // starting positions of white king
-	pair<int, int> posB = make_pair(7,3); // starting positions of black king
+	pair<int, int> posWhite = make_pair(0,3); // starting positions of white king
+	pair<int, int> posBlack = make_pair(7,3); // starting positions of black king
 	Texture texture[2];
 	RectangleShape king[2];// [0] is white [1] is black
 

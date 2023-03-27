@@ -2,8 +2,8 @@
 
 Knight::Knight() {
 
-	this->posW[0] = (make_pair(0, 1)); this->posW[1] = (make_pair(0, 6));
-	this->posB[0] = (make_pair(7, 1)); this->posB[1] = (make_pair(7, 6));
+	this->posWhites[0] = (make_pair(0, 1)); this->posWhites[1] = (make_pair(0, 6));
+	this->posBlacks[0] = (make_pair(7, 1)); this->posBlacks[1] = (make_pair(7, 6));
 
 	this->texture[0].loadFromFile("Textures/w_knight.png"); // white piece is first
 	this->texture[1].loadFromFile("Textures/b_knight.png"); // black piece is second
@@ -19,8 +19,8 @@ Knight::Knight() {
 	knightB[1] = knightB[0];
 
 	for (size_t i = 0;i < 2;i++) {
-		knightW[i].setPosition(Vector2f(posW[i].second * 100 + 5, posW[i].first * 100 + 5));
-		knightB[i].setPosition(Vector2f(posB[i].second * 100 + 5, posB[i].first * 100 + 5));
+		knightW[i].setPosition(Vector2f(posWhites[i].second * 100 + 5, posWhites[i].first * 100 + 5));
+		knightB[i].setPosition(Vector2f(posBlacks[i].second * 100 + 5, posBlacks[i].first * 100 + 5));
 	}
 
 
@@ -164,12 +164,12 @@ void Knight::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, i
 
 array<pair<int, int>, 8>& Knight::getPosW()
 {
-	return this->posW;
+	return this->posWhites;
 }
 
 array<pair<int, int>, 8>& Knight::getPosB()
 {
-	return this->posB;
+	return this->posBlacks;
 }
 
 Texture& Knight::getWhiteTexture()
@@ -185,7 +185,7 @@ Texture& Knight::getBlackTexture()
 RectangleShape& Knight::getKnightWatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posW[i] == pos)
+		if (posWhites[i] == pos)
 			return knightW[i];
 	}
 
@@ -199,7 +199,7 @@ RectangleShape& Knight::getKnightWatIndex(int index)
 RectangleShape& Knight::getKnightBatPos(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
-		if (posB[i] == pos)
+		if (posBlacks[i] == pos)
 			return knightB[i];
 	}
 

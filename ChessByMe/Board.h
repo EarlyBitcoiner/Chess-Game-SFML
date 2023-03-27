@@ -15,6 +15,7 @@ using namespace std;
 class Board{
 private:
 
+	Texture textures[2];
 	RectangleShape board[8][8];
 
 public:

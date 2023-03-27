@@ -14,8 +14,8 @@ using namespace sf;
 class Rook {
 private:
 
-	array<pair<int, int>, 8> posW;
-	array<pair<int, int>, 8> posB;
+	array<pair<int, int>, 8> posWhites;
+	array<pair<int, int>, 8> posBlacks;
 	Texture texture[2];
 	RectangleShape rookW[2];
 	RectangleShape rookB[2];

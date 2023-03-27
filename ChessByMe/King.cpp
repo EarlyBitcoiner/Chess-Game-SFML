@@ -5,13 +5,16 @@ King::King() {
 	this->texture[0].loadFromFile("Textures/w_king.png"); // white piece is first
 	this->texture[1].loadFromFile("Textures/b_king.png"); // black piece is second
 
+	this->texture[0].setSmooth(true);
+	this->texture[1].setSmooth(true);
+
 	this->king[0].setSize(Vector2f(90.f, 90.f));
 	this->king[0].setTexture(&texture[0]);
-	this->king[0].setPosition(Vector2f(posW.second * 100 + 5,posW.first * 100 + 5));
+	this->king[0].setPosition(Vector2f(posWhite.second * 100 + 5,posWhite.first * 100 + 5));
 
 	this->king[1].setSize(Vector2f(90.f, 90.f));
 	this->king[1].setTexture(&texture[1]);
-	this->king[1].setPosition(Vector2f(posB.second * 100 + 5, posB.first * 100 + 5));
+	this->king[1].setPosition(Vector2f(posBlack.second * 100 + 5, posBlack.first * 100 + 5));
 	
 }
 
@@ -53,12 +56,12 @@ void King::setBinDanger(bool value)
 
 pair<int, int>& King::getPosW()
 {
-	return this->posW;
+	return this->posWhite;
 }
 
 pair<int, int>& King::getPosB()
 {
-	return this->posB;
+	return this->posBlack;
 }
 
 Texture& King::getWhiteTexture()
@@ -179,14 +182,14 @@ void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 
 RectangleShape& King::getKingWatPos(pair<int, int> pos) {
 
-		if (posW == pos)
+		if (posWhite == pos)
 			return king[0];
 
 }
 
 RectangleShape& King::getKingBatPos(pair<int, int> pos) {
 
-	if (posB == pos)
+	if (posBlack == pos)
 		return king[1];
 
 }
