@@ -26,142 +26,6 @@ Knight::Knight() {
 
 };
 
-void Knight::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	if(pos.x + 2 < 8 && pos.y + 1 < 8 && 
-		(board[pos.x + 2][pos.y + 1] == '.' || 
-		(board[pos.x + 2][pos.y + 1] >= 97 && board[pos.x + 2][pos.y + 1] <= 122) ) ||
-		 board[pos.x + 2][pos.y + 1] == '2') {
-
-		AP.push_back(make_pair(pos.x + 2, pos.y + 1));
-	}
-
-	if (pos.x + 2 < 8 && pos.y - 1 >= 0 &&
-		(board[pos.x + 2][pos.y - 1] == '.' ||
-		(board[pos.x + 2][pos.y - 1] >= 97 && board[pos.x + 2][pos.y - 1] <= 122) ) ||
-		 board[pos.x + 2][pos.y - 1] == '2') {
-	
-		AP.push_back(make_pair(pos.x + 2, pos.y - 1));
-	}
-
-	if (pos.x + 1 < 8 && pos.y - 2 >= 0 &&
-		(board[pos.x + 1][pos.y - 2] == '.' ||
-		(board[pos.x + 1][pos.y - 2] >= 97 && board[pos.x + 1][pos.y - 2] <= 122) ) ||
-		 board[pos.x + 1][pos.y - 2] == '2') {
-
-		AP.push_back(make_pair(pos.x + 1, pos.y - 2));
-	}
-
-	if (pos.x - 1 >= 0 && pos.y - 2 >= 0 &&
-		(board[pos.x - 1][pos.y - 2] == '.' ||
-		(board[pos.x - 1][pos.y - 2] >= 97 && board[pos.x - 1][pos.y - 2] <= 122) ) ||
-		 board[pos.x - 1][pos.y - 2] == '2') {
-
-		AP.push_back(make_pair(pos.x - 1, pos.y - 2));
-	}
-
-	if (pos.x - 2 >= 0 && pos.y - 1 >= 0 &&
-		(board[pos.x - 2][pos.y - 1] == '.' ||
-		(board[pos.x - 2][pos.y - 1] >= 97 && board[pos.x - 2][pos.y - 1] <= 122) ) ||
-		 board[pos.x - 2][pos.y - 1] == '2') {
-
-		AP.push_back(make_pair(pos.x - 2, pos.y - 1));
-	}
-
-	if (pos.x - 2 >= 0 && pos.y + 1 < 8 &&
-		(board[pos.x - 2][pos.y + 1] == '.' ||
-		(board[pos.x - 2][pos.y + 1] >= 97 && board[pos.x - 2][pos.y + 1] <= 122) ) ||
-		 board[pos.x - 2][pos.y + 1] == '2') {
-
-		AP.push_back(make_pair(pos.x - 2, pos.y + 1));
-	}
-
-	if (pos.x - 1 >= 0 && pos.y + 2 < 8 &&
-		(board[pos.x - 1][pos.y + 2] == '.' ||
-		(board[pos.x - 1][pos.y + 2] >= 97 && board[pos.x - 1][pos.y + 2] <= 122) ) ||
-		 board[pos.x - 1][pos.y + 2] == '2') {
-
-		AP.push_back(make_pair(pos.x -1, pos.y + 2));
-	}
-
-	if (pos.x + 1 < 8 && pos.y + 2 < 8 &&
-		(board[pos.x + 1][pos.y + 2] == '.' ||
-		(board[pos.x + 1][pos.y + 2] >= 97 && board[pos.x + 1][pos.y + 2] <= 122) ) ||
-		 board[pos.x + 1][pos.y + 2] == '2') {
-
-		AP.push_back(make_pair(pos.x + 1, pos.y + 2));
-	}
-};
-
-void Knight::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	if (pos.x + 2 < 8 && pos.y + 1 < 8 &&
-		(board[pos.x + 2][pos.y + 1] == '.' ||
-		(board[pos.x + 2][pos.y + 1] >= 65 && board[pos.x + 2][pos.y + 1] <= 90) ) ||
-		 board[pos.x + 2][pos.y + 1] == '1') {
-
-		AP.push_back(make_pair(pos.x + 2, pos.y + 1));
-	}
-
-	if (pos.x + 2 < 8 && pos.y - 1 >= 0 &&
-		(board[pos.x + 2][pos.y - 1] == '.' ||
-		(board[pos.x + 2][pos.y - 1] >= 65 && board[pos.x + 2][pos.y - 1] <= 90) ) ||
-		 board[pos.x + 2][pos.y - 1] == '1') {
-
-		AP.push_back(make_pair(pos.x + 2, pos.y - 1));
-	}
-
-	if (pos.x + 1 < 8 && pos.y - 2 >= 0 &&
-		(board[pos.x + 1][pos.y - 2] == '.' ||
-		(board[pos.x + 1][pos.y - 2] >= 65 && board[pos.x + 1][pos.y - 2] <= 90) ) ||
-		 board[pos.x + 1][pos.y - 2] == '1') {
-
-		AP.push_back(make_pair(pos.x + 1, pos.y - 2));
-	}
-
-	if (pos.x - 1 >= 0 && pos.y - 2 >= 0 &&
-		(board[pos.x - 1][pos.y - 2] == '.' ||
-		(board[pos.x - 1][pos.y - 2] >= 65 && board[pos.x - 1][pos.y - 2] <= 90) ) ||
-		 board[pos.x - 1][pos.y - 2] == '1') {
-
-		AP.push_back(make_pair(pos.x - 1, pos.y - 2));
-	}
-
-	if (pos.x - 2 >= 0 && pos.y - 1 >= 0 &&
-		(board[pos.x - 2][pos.y - 1] == '.' ||
-		(board[pos.x - 2][pos.y - 1] >= 65 && board[pos.x - 2][pos.y - 1] <= 90) ) ||
-		 board[pos.x - 2][pos.y - 1] == '1') {
-
-		AP.push_back(make_pair(pos.x - 2, pos.y - 1));
-	}
-
-	if (pos.x - 2 >= 0 && pos.y + 1 < 8 &&
-		(board[pos.x - 2][pos.y + 1] == '.' ||
-		(board[pos.x - 2][pos.y + 1] >= 65 && board[pos.x - 2][pos.y + 1] <= 90) ) ||
-		 board[pos.x - 2][pos.y + 1] == '1') {
-
-		AP.push_back(make_pair(pos.x - 2, pos.y + 1));
-	}
-
-	if (pos.x - 1 >= 0 && pos.y + 2 < 8 &&
-		(board[pos.x - 1][pos.y + 2] == '.' ||
-		(board[pos.x - 1][pos.y + 2] >= 65 && board[pos.x - 1][pos.y + 2] <= 90) ) ||
-		 board[pos.x - 1][pos.y + 2] == '1') {
-
-		AP.push_back(make_pair(pos.x - 1, pos.y + 2));
-	}
-
-	if (pos.x + 1 < 8 && pos.y + 2 < 8 &&
-		(board[pos.x + 1][pos.y + 2] == '.' ||
-		(board[pos.x + 1][pos.y + 2] >= 65 && board[pos.x + 1][pos.y + 2] <= 90) ) ||
-		 board[pos.x + 1][pos.y + 2] == '1') {
-
-		AP.push_back(make_pair(pos.x + 1, pos.y + 2));
-	}
-};
-
 array<pair<int, int>, 8>& Knight::getPosW()
 {
 	return this->posWhites;
@@ -182,7 +46,7 @@ Texture& Knight::getBlackTexture()
 	return this->texture[1];
 }
 
-RectangleShape& Knight::getKnightWatPos(pair<int, int> pos) {
+RectangleShape& Knight::getWKnightShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posWhites[i] == pos)
@@ -190,13 +54,13 @@ RectangleShape& Knight::getKnightWatPos(pair<int, int> pos) {
 	}
 
 }
-RectangleShape& Knight::getKnightWatIndex(int index)
+RectangleShape& Knight::getWKnightShapeAt(int index)
 {
 	return this->knightW[index];
 }
 ;
 
-RectangleShape& Knight::getKnightBatPos(pair<int, int> pos) {
+RectangleShape& Knight::getBKnightShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posBlacks[i] == pos)
@@ -204,7 +68,7 @@ RectangleShape& Knight::getKnightBatPos(pair<int, int> pos) {
 	}
 
 }
-RectangleShape& Knight::getKnightBatIndex(int index)
+RectangleShape& Knight::getBKnightShapeAt(int index)
 {
 	return this->knightB[index];
 }

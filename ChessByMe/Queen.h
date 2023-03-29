@@ -1,6 +1,8 @@
 #ifndef QUEEN_H
 #define QUEEN_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace sf;
 
-class Queen {
+class Queen : public Figure {
 private:
 	array<pair<int, int>, 8> posWhites;
 	array<pair<int, int>, 8> posBlacks;
@@ -45,17 +47,13 @@ public:
 
 	int getBqueens();
 
-	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWQueenShapeAt(pair<int, int>);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape* getWQueenShapeAt(int index);
 
-	RectangleShape& getQueenW(pair<int, int>);
+	RectangleShape& getBQueenShapeAt(pair<int, int>);
 
-	RectangleShape* getQueenWatIndex(int index);
-
-	RectangleShape& getQueenB(pair<int, int>);
-
-	RectangleShape* getQueenBatIndex(int index);
+	RectangleShape* getBQueenShapeAt(int index);
 
 };
 

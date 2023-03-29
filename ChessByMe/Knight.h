@@ -1,6 +1,8 @@
 #ifndef KNIGHT_H
 #define KNIGHT_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace sf;
 
-class Knight {
+class Knight : public Figure {
 private:
 
 	array<pair<int, int>, 8> posWhites;
@@ -31,17 +33,13 @@ public:
 
 	Texture& getBlackTexture();
 
-	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWKnightShapeAt(pair<int, int>);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWKnightShapeAt(int index);
 
-	RectangleShape& getKnightWatPos(pair<int, int>);
+	RectangleShape& getBKnightShapeAt(pair<int, int>);
 
-	RectangleShape& getKnightWatIndex(int index);
-
-	RectangleShape& getKnightBatPos(pair<int, int>);
-
-	RectangleShape& getKnightBatIndex(int index);
+	RectangleShape& getBKnightShapeAt(int index);
 
 };
 

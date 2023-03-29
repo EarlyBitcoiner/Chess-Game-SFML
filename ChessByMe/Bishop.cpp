@@ -45,192 +45,7 @@ Texture& Bishop::getBlackTexture()
 	return this->texture[1];
 }
 
-void Bishop::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x + i][pos.y + i] == '.' && pos.x + i < 8 && pos.y + i < 8) {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 97 && board[pos.x + i][pos.y + i] <= 122) {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 65 && board[pos.x + i][pos.y + i] <= 90 || board[pos.x + i][pos.y + i] == '1') {
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] == '2') {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-			break;
-		}
-		else if (pos.x + i >= 8 || pos.y + i >= 8) {
-			break;
-		}
-
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x + i][pos.y - i] == '.' && pos.x + i < 8 && pos.y - i >= 0) {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 97 && board[pos.x + i][pos.y - i] <= 122) {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 65 && board[pos.x + i][pos.y - i] <= 90 || board[pos.x + i][pos.y - i] == '1') {
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] == '2') {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-			break;
-		}
-		else if (pos.x + i >= 8 || pos.y - i < 0) {
-			break;
-		}
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x - i][pos.y - i] == '.' && pos.x - i >= 0 && pos.y - i >= 0) {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 97 && board[pos.x - i][pos.y - i] <= 122) {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 65 && board[pos.x - i][pos.y - i] <= 90 || board[pos.x - i][pos.y - i] == '1') {
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] == '2') {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-			break;
-		}
-		else if ((pos.x - i) < 0 || (pos.y - i) < 0) {
-			break;
-		}
-
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x - i][pos.y + i] == '.' && pos.x - i >= 0 && pos.y + i < 8) {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 97 && board[pos.x - i][pos.y + i] <= 122) {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 65 && board[pos.x - i][pos.y + i] <= 90 || board[pos.x - i][pos.y + i] == '1') {
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] == '2') {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-			break;
-		}
-		else if (pos.x - i < 0 || pos.y + i >= 8) {
-			break;
-		}
-
-	}
-}
-
-void Bishop::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x + i][pos.y + i] == '.' && pos.x + i < 8 && pos.y + i < 8) {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 65 && board[pos.x + i][pos.y + i] <= 90) {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] >= 97 && board[pos.x + i][pos.y + i] <= 122 || board[pos.x + i][pos.y + i] == '2') {
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y + i < 8 && board[pos.x + i][pos.y + i] == '1') {
-			AP.push_back(make_pair(pos.x + i, pos.y + i));
-			break;
-		}
-		else if (pos.x + i >= 8 || pos.y + i >= 8) {
-			break;
-		}
-
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x + i][pos.y - i] == '.' && pos.x + i < 8 && pos.y - i >= 0) {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 65 && board[pos.x + i][pos.y - i] <= 90) {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] >= 97 && board[pos.x + i][pos.y - i] <= 122 || board[pos.x + i][pos.y - i] == '2') {
-			break;
-		}
-		else if (pos.x + i < 8 && pos.y - i >= 0 && board[pos.x + i][pos.y - i] == '1') {
-			AP.push_back(make_pair(pos.x + i, pos.y - i));
-			break;
-		}
-		else if (pos.x + i >= 8 || pos.y - i < 0) {
-			break;
-		}
-
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x - i][pos.y - i] == '.' && pos.x - i >= 0 && pos.y - i >= 0) {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 65 && board[pos.x - i][pos.y - i] <= 90) {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] >= 97 && board[pos.x - i][pos.y - i] <= 122 || board[pos.x - i][pos.y - i] == '2') {
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y - i >= 0 && board[pos.x - i][pos.y - i] == '1') {
-			AP.push_back(make_pair(pos.x - i, pos.y - i));
-			break;
-		}
-		else if (pos.x - i < 0 || pos.y - i < 0) {
-			break;
-		}
-
-	}
-
-	for (int i = 1;i < 8;i++) {
-
-		if (board[pos.x - i][pos.y + i] == '.' && pos.x - i >= 0 && pos.y + i < 8) {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 65 && board[pos.x - i][pos.y + i] <= 90) {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] >= 90 && board[pos.x - i][pos.y + i] <= 122 || board[pos.x - i][pos.y + i] == '2') {
-			break;
-		}
-		else if (pos.x - i >= 0 && pos.y + i < 8 && board[pos.x - i][pos.y + i] == '1') {
-			AP.push_back(make_pair(pos.x - i, pos.y + i));
-			break;
-		}
-		else if (pos.x - i < 0 || pos.y + i >= 8) {
-			break;
-		}
-
-	}
-}
-
-RectangleShape& Bishop::getBishopWatPos(pair<int, int> pos) {
+RectangleShape& Bishop::getWBishopShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posWhites[i] == pos)
@@ -238,13 +53,13 @@ RectangleShape& Bishop::getBishopWatPos(pair<int, int> pos) {
 	}
 
 }
-RectangleShape& Bishop::getBishopWatIndex(int index)
+
+RectangleShape& Bishop::getWBishopShapeAt(int index)
 {
 	return this->bishopW[index];
 }
-;
 
-RectangleShape& Bishop::getBishopBatPos(pair<int, int> pos) {
+RectangleShape& Bishop::getBBishopShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posBlacks[i] == pos)
@@ -252,8 +67,8 @@ RectangleShape& Bishop::getBishopBatPos(pair<int, int> pos) {
 	}
 
 }
-RectangleShape& Bishop::getBishopBatIndex(int index)
+
+RectangleShape& Bishop::getBBishopShapeAt(int index)
 {
 	return this->bishopB[index];
 }
-;

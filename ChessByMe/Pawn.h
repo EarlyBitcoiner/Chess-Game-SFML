@@ -1,6 +1,8 @@
 #ifndef PAWN_H
 #define PAWN_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace sf;
 
-class Pawn {
+class Pawn : public Figure {
 private:
 	array<pair<int, int>, 8> posWhites; // starting positions of white pawns
 	array<pair<int, int>, 8> posBlacks; // starting positions of black pawns
@@ -40,21 +42,21 @@ public:
 
 	array<pair<int, int>, 8>& getPosB();
 
+	void GetPossiblePosPawnWhites(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+
+	void GetPossiblePosPawnBlacks(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+
 	Texture& getWhiteTexture();
 
 	Texture& getBlackTexture();
 
-	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWPawnShapeAt(pair<int, int>);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWPawnShapeAt(int index);
 
-	RectangleShape& getPawnWatPos(pair<int, int>);
+	RectangleShape& getBPawnShapeAt(pair<int, int>);
 
-	RectangleShape& getPawnWatIndex(int index);
-
-	RectangleShape& getPawnBatPos(pair<int, int>);
-
-	RectangleShape& getPawnBatIndex(int index);
+	RectangleShape& getBPawnShapeAt(int index);
 };
 
 #endif // !1

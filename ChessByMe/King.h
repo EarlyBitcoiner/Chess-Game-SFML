@@ -1,6 +1,8 @@
 #ifndef KING_H
 #define KING_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -10,9 +12,8 @@
 using namespace std;
 using namespace sf;
 
-class King {
+class King : public Figure {
 private:
-
 	pair<int, int> posWhite = make_pair(0,3); // starting positions of white king
 	pair<int, int> posBlack = make_pair(7,3); // starting positions of black king
 	Texture texture[2];
@@ -48,15 +49,15 @@ public:
 
 	Texture& getBlackTexture();
 
-	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	void GetPossiblePosKingWhites(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	void GetPossiblePosKingBlacks(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
 
-	RectangleShape& getKingWatPos(pair<int, int>);
+	RectangleShape& getWKingShapeAt(pair<int, int>);
 
-	RectangleShape& getKingBatPos(pair<int, int>);
+	RectangleShape& getBKingShapeAt(pair<int, int>);
 
-	RectangleShape& getKingAtIndex(int index);
+	RectangleShape& getKingShapeAt(int index);
 };
 
 #endif

@@ -70,20 +70,9 @@ Texture& Pawn::getBlackTexture()
 	return this->texture[1];
 }
 
-void Pawn::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	if (pos.x == 1 && board[pos.x + 2][pos.y] == '.')
-		AP.push_back(make_pair(pos.x + 2, pos.y));
-
-	if (pos.x + 1 < 8 && board[pos.x + 1][pos.y] == '.')
-		AP.push_back(make_pair(pos.x + 1, pos.y));
-
-	if (pos.x + 1 >= 0 && pos.y + 1 >= 0 && (board[pos.x + 1][pos.y + 1] >= 97 && board[pos.x + 1][pos.y + 1] <= 122 || board[pos.x + 1][pos.y + 1] == '2'))
-		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
-
-	if (pos.x + 1 >= 0 && pos.y - 1 >= 0 && (board[pos.x + 1][pos.y - 1] >= 97 && board[pos.x + 1][pos.y - 1] <= 122 || board[pos.x + 1][pos.y - 1] == '2'))
-		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
+void Pawn::GetPossiblePosPawnWhites(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
+	
+	Figure::GetPossiblePosPawnWhites(board, pos, AP);
 
 	// checking if en passant is possible.
 	if (pos.y + 1 < 8 && board[pos.x][pos.y + 1] == 'p' && make_pair(pos.x, pos.y + 1) == this->enPassantPawnPos && this->enPassant)
@@ -93,20 +82,9 @@ void Pawn::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
 };
 
-void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	if (pos.x == 6 && board[pos.x - 2][pos.y]== '.')
-		AP.push_back(make_pair(pos.x - 2, pos.y));
-
-	if (pos.x - 1 >= 0 && board[pos.x - 1][pos.y] == '.')
-		AP.push_back(make_pair(pos.x - 1, pos.y));
-
-	if (pos.x - 1 >= 0 && pos.y - 1 >= 0 && (board[pos.x - 1][pos.y - 1] >= 65 && board[pos.x - 1][pos.y - 1] <= 90 || board[pos.x - 1][pos.y - 1] == '1'))
-		AP.push_back(make_pair(pos.x - 1, pos.y - 1));
-
-	if (pos.x - 1 >= 0 && pos.y + 1 >= 0 && (board[pos.x - 1][pos.y + 1] >= 65 && board[pos.x - 1][pos.y + 1] <= 90 || board[pos.x - 1][pos.y + 1] == '1'))
-		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
+void Pawn::GetPossiblePosPawnBlacks(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
+	
+	Figure::GetPossiblePosPawnBlacks(board, pos, AP);
 
 	// checking if en passant is possible.
 	if (pos.y + 1 < 8 && board[pos.x][pos.y + 1] == 'P' && make_pair(pos.x, pos.y + 1) == this->enPassantPawnPos && this->enPassant)
@@ -116,7 +94,7 @@ void Pawn::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 		AP.push_back(make_pair(pos.x - 1, pos.y - 1));
 };
 
-RectangleShape& Pawn::getPawnWatPos(pair<int, int> pos) {
+RectangleShape& Pawn::getWPawnShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posWhites[i] == pos)
@@ -125,12 +103,12 @@ RectangleShape& Pawn::getPawnWatPos(pair<int, int> pos) {
 
 }
 
-RectangleShape& Pawn::getPawnWatIndex(int index)
+RectangleShape& Pawn::getWPawnShapeAt(int index)
 {
 	return this->pawnW[index];
 }
 
-RectangleShape& Pawn::getPawnBatPos(pair<int, int> pos) {
+RectangleShape& Pawn::getBPawnShapeAt(pair<int, int> pos) {
 
 	for (size_t i = 0;i < 8;i++) {
 		if (posBlacks[i] == pos)
@@ -139,7 +117,7 @@ RectangleShape& Pawn::getPawnBatPos(pair<int, int> pos) {
 
 }
 
-RectangleShape& Pawn::getPawnBatIndex(int index)
+RectangleShape& Pawn::getBPawnShapeAt(int index)
 {
 	return this->pawnB[index];
 }

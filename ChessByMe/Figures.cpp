@@ -11,6 +11,36 @@ Figures::Figures() {
 	LoadStartingPositions();
 }
 
+Knight& Figures::getKnights()
+{
+	return this->knights;
+}
+
+Bishop& Figures::getBishops()
+{
+	return this->bishops;
+}
+
+Pawn& Figures::getPawns()
+{
+	return this->pawns;
+}
+
+Queen& Figures::getQueens()
+{
+	return this->queens;
+}
+
+Rook& Figures::getRooks()
+{
+	return this->rooks;
+}
+
+King& Figures::getKings()
+{
+	return this->kings;
+}
+
 void Figures::LoadStartingPositions() {
 	//White
 	board[0][0] = 'R'; board[0][7] = 'R';

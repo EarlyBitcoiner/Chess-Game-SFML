@@ -74,40 +74,9 @@ Texture& King::getBlackTexture()
 	return this->texture[1];
 }
 
-void King::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
+void King::GetPossiblePosKingWhites(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
-	if ( (board[pos.x + 1][pos.y] == '.' || board[pos.x + 1][pos.y] >= 97 && board[pos.x + 1][pos.y] <= 122 || board[pos.x + 1][pos.y] == '2') &&
-		pos.x + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y));
-
-	if ( (board[pos.x + 1][pos.y - 1] == '.' || board[pos.x + 1][pos.y - 1] >= 97 && board[pos.x + 1][pos.y - 1] <= 122 || board[pos.x + 1][pos.y - 1] == '2') &&
-		pos.y - 1 >= 0 && pos.x + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
-
-	if ( (board[pos.x][pos.y - 1] == '.' || board[pos.x][pos.y - 1] >= 97 && board[pos.x][pos.y - 1] <= 122 || board[pos.x][pos.y - 1] == '2') &&
-		pos.y - 1 >= 0)
-		AP.push_back(make_pair(pos.x , pos.y - 1));
-
-	if ( (board[pos.x - 1][pos.y - 1] == '.' || board[pos.x - 1][pos.y - 1] >= 97 && board[pos.x - 1][pos.y - 1] <= 122 || board[pos.x - 1][pos.y - 1] == '2') &&
-		pos.x - 1 >= 0 && pos.y - 1 >= 0)
-		AP.push_back(make_pair(pos.x - 1, pos.y - 1));
-
-	if ( (board[pos.x - 1][pos.y] == '.' || board[pos.x - 1][pos.y] >= 97 && board[pos.x - 1][pos.y] <= 122 || board[pos.x - 1][pos.y] == '2') &&
-		pos.x - 1 >= 0)
-		AP.push_back(make_pair(pos.x - 1, pos.y));
-
-	if ( (board[pos.x - 1][pos.y + 1] == '.' || board[pos.x - 1][pos.y + 1] >= 97 && board[pos.x - 1][pos.y + 1] <= 122 || board[pos.x - 1][pos.y + 1] == '2') &&
-		pos.x - 1 >= 0 && pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
-
-	if ( (board[pos.x][pos.y + 1] == '.' || board[pos.x][pos.y + 1] >= 97 && board[pos.x][pos.y + 1] <= 122 || board[pos.x][pos.y + 1] == '2') &&
-		pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x, pos.y + 1));
-
-	if ( (board[pos.x + 1][pos.y + 1] == '.' || board[pos.x + 1][pos.y + 1] >= 97 && board[pos.x + 1][pos.y + 1] <= 122 || board[pos.x + 1][pos.y + 1] == '2') &&
-		pos.x + 1 < 8 && pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
+	Figure::GetPossiblePosKingWhites(board, pos, AP);
 
 	if ( hasWmoved == 0 && board[pos.x][pos.y + 1] == '.' && 
 		 board[pos.x][pos.y + 2] == '.' && 
@@ -127,40 +96,9 @@ void King::GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int
 	}
 };
 
-void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
-	AP.push_back(make_pair(pos.x, pos.y));
-
-	if ((board[pos.x + 1][pos.y] == '.' || board[pos.x + 1][pos.y] >= 65 && board[pos.x + 1][pos.y] <= 90 || board[pos.x + 1][pos.y] == '1') &&
-		pos.x + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y));
-
-	if ((board[pos.x + 1][pos.y - 1] == '.' || board[pos.x + 1][pos.y - 1] >= 65 && board[pos.x + 1][pos.y - 1] <= 90 || board[pos.x + 1][pos.y - 1] == '1') &&
-		pos.y - 1 >= 0 && pos.x + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y - 1));
-
-	if ((board[pos.x][pos.y - 1] == '.' || board[pos.x][pos.y - 1] >= 65 && board[pos.x][pos.y - 1] <= 90 || board[pos.x][pos.y - 1] == '1') &&
-		pos.y - 1 >= 0)
-		AP.push_back(make_pair(pos.x, pos.y - 1));
-
-	if ((board[pos.x - 1][pos.y - 1] == '.' || board[pos.x - 1][pos.y - 1] >= 65 && board[pos.x - 1][pos.y - 1] <= 90 || board[pos.x - 1][pos.y - 1] == '1') &&
-		pos.x - 1 >= 0 && pos.y - 1 >= 0)
-		AP.push_back(make_pair(pos.x - 1, pos.y - 1));
-
-	if ((board[pos.x - 1][pos.y] == '.' || board[pos.x - 1][pos.y] >= 65 && board[pos.x - 1][pos.y] <= 90 || board[pos.x - 1][pos.y] == '1') &&
-		pos.x - 1 >= 0)
-		AP.push_back(make_pair(pos.x - 1, pos.y));
-
-	if ((board[pos.x - 1][pos.y + 1] == '.' || board[pos.x - 1][pos.y + 1] >= 65 && board[pos.x - 1][pos.y + 1] <= 90 || board[pos.x - 1][pos.y + 1] == '1') &&
-		pos.x - 1 >= 0 && pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x - 1, pos.y + 1));
-
-	if ((board[pos.x][pos.y + 1] == '.' || board[pos.x][pos.y + 1] >= 65 && board[pos.x][pos.y + 1] <= 90 || board[pos.x][pos.y + 1] == '1') &&
-		pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x, pos.y + 1));
-
-	if ((board[pos.x + 1][pos.y + 1] == '.' || board[pos.x + 1][pos.y + 1] >= 65 && board[pos.x + 1][pos.y + 1] <= 90 || board[pos.x + 1][pos.y + 1] == '1') &&
-		pos.x + 1 < 8 && pos.y + 1 < 8)
-		AP.push_back(make_pair(pos.x + 1, pos.y + 1));
+void King::GetPossiblePosKingBlacks(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
+	
+	Figure::GetPossiblePosKingBlacks(board, pos, AP);
 
 	if (hasBmoved == 0 && board[pos.x][pos.y + 1] == '.' &&
 		board[pos.x][pos.y + 2] == '.' &&
@@ -180,22 +118,21 @@ void King::GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int
 	}
 };
 
-RectangleShape& King::getKingWatPos(pair<int, int> pos) {
+RectangleShape& King::getWKingShapeAt(pair<int, int> pos) {
 
 		if (posWhite == pos)
 			return king[0];
 
 }
 
-RectangleShape& King::getKingBatPos(pair<int, int> pos) {
+RectangleShape& King::getBKingShapeAt(pair<int, int> pos) {
 
 	if (posBlack == pos)
 		return king[1];
 
 }
 
-RectangleShape& King::getKingAtIndex(int index)
+RectangleShape& King::getKingShapeAt(int index)
 {
 	return this->king[index];
 }
-;

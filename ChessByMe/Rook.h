@@ -1,6 +1,8 @@
 #ifndef ROOK_H
 #define ROOK_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace sf;
 
-class Rook {
+class Rook : public Figure {
 private:
 
 	array<pair<int, int>, 8> posWhites;
@@ -32,17 +34,13 @@ public:
 
 	Texture& getBlackTexture();
 
-	void GetAvailablePosW(char board[8][8],Vector2i pos,vector<pair<int,int>>& AP);
+	RectangleShape& getWRookShapeAt(pair<int, int>);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWRookShapeAt(int index);
 
-	RectangleShape& getRookWatPos(pair<int, int>);
+	RectangleShape& getBRookShapeAt(pair<int, int>);
 
-	RectangleShape& getRookWatIndex(int index);
-
-	RectangleShape& getRookBatPos(pair<int, int>);
-
-	RectangleShape& getRookBatIndex(int index);
+	RectangleShape& getBRookShapeAt(int index);
 };
 
 #endif // !ROOK_H

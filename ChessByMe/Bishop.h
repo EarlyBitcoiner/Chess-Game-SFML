@@ -1,6 +1,8 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 
+#include "Figure.h"
+
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 using namespace std;
 using namespace sf;
 
-class Bishop {
+class Bishop : public Figure {
 private:
 
 	array<pair<int, int>,8> posWhites;
@@ -32,17 +34,13 @@ public:
 
 	Texture& getBlackTexture();
 
-	void GetAvailablePosW(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWBishopShapeAt(pair<int, int>);
 
-	void GetAvailablePosB(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP);
+	RectangleShape& getWBishopShapeAt(int index);
 
-	RectangleShape& getBishopWatPos(pair<int, int>);
+	RectangleShape& getBBishopShapeAt(pair<int, int>);
 
-	RectangleShape& getBishopWatIndex(int index);
-
-	RectangleShape& getBishopBatPos(pair<int, int>);
-
-	RectangleShape& getBishopBatIndex(int index);
+	RectangleShape& getBBishopShapeAt(int index);
 };
 
 #endif

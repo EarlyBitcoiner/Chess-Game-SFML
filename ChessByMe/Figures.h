@@ -18,8 +18,7 @@ using namespace sf;
 using namespace std;
 
 class Figures {
-public:
-	char board[8][8];
+private:
 	Knight knights;
 	Bishop bishops;
 	Pawn pawns;
@@ -27,11 +26,24 @@ public:
 	Rook rooks;
 	King kings;
 
-	Figures();
-
 	void LoadStartingPositions();
 
+public:
+	char board[8][8];
 
+	Figures();
+
+	Knight& getKnights();
+
+	Bishop& getBishops();
+
+	Pawn& getPawns();
+
+	Queen& getQueens();
+
+	Rook& getRooks();
+
+	King& getKings();
 };
 
 #endif 
