@@ -1,7 +1,6 @@
 
 #include "Board.h"
 #include "Game.h"
-#include "Figures.h"
 
 using namespace sf;
 using namespace std;

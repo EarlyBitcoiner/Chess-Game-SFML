@@ -2,7 +2,9 @@
 
 void Figure::GetPossiblePosWhitesDiagonaly(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP)
 {
-	AP.push_back(make_pair(pos.x, pos.y));
+	if (AP.size() == 0) {
+		AP.push_back(make_pair(pos.x, pos.y));
+	}
 
 	for (int i = 1;i < 8;i++) {
 
@@ -94,7 +96,9 @@ void Figure::GetPossiblePosWhitesDiagonaly(char board[8][8], Vector2i pos, vecto
 
 void Figure::GetPossiblePosBlacksDiagonaly(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP)
 {
-	AP.push_back(make_pair(pos.x, pos.y));
+	if (AP.size() == 0) {
+		AP.push_back(make_pair(pos.x, pos.y));
+	}
 
 	for (int i = 1;i < 8;i++) {
 
@@ -187,7 +191,9 @@ void Figure::GetPossiblePosBlacksDiagonaly(char board[8][8], Vector2i pos, vecto
 
 void Figure::GetPossiblePosRookWhites(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
-	AP.push_back(make_pair(pos.x, pos.y));
+	if (AP.size()==0) {
+		AP.push_back(make_pair(pos.x, pos.y));
+	}
 
 	for (int r = pos.x - 1;r >= 0;r--) {
 
@@ -261,7 +267,9 @@ void Figure::GetPossiblePosRookWhites(char board[8][8], Vector2i pos, vector<pai
 
 void Figure::GetPossiblePosRookBlacks(char board[8][8], Vector2i pos, vector<pair<int, int>>& AP) {
 
-	AP.push_back(make_pair(pos.x, pos.y));
+	if (AP.size() == 0) {
+		AP.push_back(make_pair(pos.x, pos.y));
+	}
 
 	for (int r = pos.x - 1;r >= 0;r--) {
 

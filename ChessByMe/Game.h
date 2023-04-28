@@ -78,7 +78,7 @@ public:
 
 	bool checkIfPlayerPutsOwnKingInDanger(int r,int c,pair<int,int>); // Does a simulation of the next move and decides it's validity based on whether the king will be put in danger. If you put your own king in danger then it is invalid. If your king is check and you make a move not putting it out of check it is invalid.
 
-	void checkIfGameEnded(); // Here we check if the we have a winner or a draw.
+	bool checkIfGameEnded(); // Here we check if the we have a winner or a draw.
 
 	bool checkForStaleMate(); // We check for draw
 
