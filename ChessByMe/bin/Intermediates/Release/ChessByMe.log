@@ -1,0 +1,18 @@
+﻿  Generating code
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\user\source\repos\ChessGame\ChessByMe\King.cpp(126): warning C4715: 'King::getWKingShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\King.cpp(133): warning C4715: 'King::getBKingShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Bishop.cpp(69): warning C4715: 'Bishop::getBBishopShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Knight.cpp(70): warning C4715: 'Knight::getBKnightShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Bishop.cpp(55): warning C4715: 'Bishop::getWBishopShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Rook.cpp(69): warning C4715: 'Rook::getBRookShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Rook.cpp(55): warning C4715: 'Rook::getWRookShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Queen.cpp(60): warning C4715: 'Queen::getBQueenShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Queen.cpp(47): warning C4715: 'Queen::getWQueenShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Pawn.cpp(118): warning C4715: 'Pawn::getBPawnShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Pawn.cpp(104): warning C4715: 'Pawn::getWPawnShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Knight.cpp(56): warning C4715: 'Knight::getWKnightShapeAt': not all control paths return a value
+C:\Users\user\source\repos\ChessGame\ChessByMe\Game.cpp(334): warning C4715: 'Game::checkIfGameEnded': not all control paths return a value
+  All 418 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  ChessByMe.vcxproj -> C:\Users\user\source\repos\ChessGame\ChessByMe\bin\Win32\Release\ChessByMe.exe

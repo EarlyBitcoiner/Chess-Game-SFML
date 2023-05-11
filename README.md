@@ -5,15 +5,19 @@ If you are wanting to understand the code you should read a little about SFML an
 Best way to do this is rading the tutorials from their site https://www.sfml-dev.org/tutorials/2.5/ they are very simple and well explained. Other way is watching videos
 but my opinion is that reading from the site will be faster.
 
+Gameplay photos: 
+
+![game2](https://github.com/EarlyBitcoiner/Chess-Game-SFML/assets/97707707/88e83d49-a55c-4af4-892f-31de41674b93)
+
+![game](https://github.com/EarlyBitcoiner/Chess-Game-SFML/assets/97707707/2b95e59c-356b-48bd-82eb-a37485292189)
+
 Ways to play:
  - Meet with a friend and take turns.
  - Alone, trying or experimenting moves.
 
-Steps to run the code:
+Steps to set up the MVS enviorment and run the code:
  - Download & Install SFML(Super Fast Media Library) from https://www.sfml-dev.org/download.php
- - Link the Installed library to Visual Studio following the steps in the video - https://www.youtube.com/watch?v=YfMQyOw1zik
- - Create folder named "Textures" in the Project directory.
- - Download the png's of the figures from the repository. Put them in the folder which we created in the previous step and make sure not to change the names of the png's or the code won't work.
+ - Link the Installed library to Microsoft Visual Studio following the steps in thir site - https://www.sfml-dev.org/tutorials/2.5/start-vc.php
  - Run code.
 
 How to change the textures of the Figures:
